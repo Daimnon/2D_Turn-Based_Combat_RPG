@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d48620f5b75a3546b36c48f93af7e1d, type: 3}
+  m_Name: Player Character
+  m_EditorClassIdentifier: 
+  _name: 
+  _maxLevel: 0
+  _currentLevel: 0
+  _maxExp: 0
+  _currentExp: 0
+  _maxHealth: 0
+  _currentHealth: 0
+  _maxMana: 0
+  _currentMana: 0
+  _vigor: 0
+  _strength: 0
+  _intelligence: 0
+  _speed: 0
+  _totalSkillPoints: 0
+  _spentSkillPoints: 0
+  _availableSkillPoints: 0
+  _totalStatPoints: 0
+  _spentStatPoints: 0
+  _availableStatPoints: 0
+  _headGear: {fileID: 0}
+  _topGear: {fileID: 0}
+  _bottomGear: {fileID: 0}
+  _handsGear: {fileID: 0}
+  _feetGear: {fileID: 0}
+  _primaryOneHanded: {fileID: 0}
+  _secondaryOneHanded: {fileID: 0}
+  _twoHanded: {fileID: 0}
+  _allAquiredSkills: []
+  _activeSkills:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
