@@ -15,8 +15,8 @@ public class Character : Role, ICharacter
     public CharacterData Data => _data;
 
     [SerializeField] private Character _lastCharacterClickedOn;
-    [SerializeField] private bool _startCombat = false, _finishedCombat = false, _startWaiting = false, _finishedWaiting = false, _startAttacking = false,
-                                  _finishedAttacking = false, _startResolving = false, _finishedResolving = false, _isAlive = true;
+    [SerializeField] private bool _startCombat = false, _finishedCombat = false, _myTurn = false, _startWaiting = false, _finishedWaiting = false,
+                                  _startAttacking = false, _finishedAttacking = false, _startResolving = false, _finishedResolving = false, _isAlive = true;
 
     public Character LastCharacterClickedOn => _lastCharacterClickedOn;
     public bool IsAlive { get => _isAlive; set => _ = value; }
@@ -61,6 +61,9 @@ public class Character : Role, ICharacter
     private void OutsideOfCombat() // while situation where combat do not take place
     {
         // happens before the loop of the first frame where the condition is met
+        if (_myTurn)
+            _myTurn = false;
+
         if (_finishedCombat)
             _state = Waiting;
         // ---------------------------------------------------------------------
@@ -79,7 +82,7 @@ public class Character : Role, ICharacter
         if (_finishedCombat)
             _state = OutsideOfCombat;
 
-        if (_finishedWaiting)
+        if (_myTurn && _finishedWaiting)
             _state = Attacking;
         // ---------------------------------------------------------------------
 
@@ -94,6 +97,9 @@ public class Character : Role, ICharacter
     private void Attacking() // while this character's attacks
     {
         // happens before the loop of the first frame where the condition is met
+        if (!_myTurn)
+            return;
+
         if (_finishedCombat)
             _state = OutsideOfCombat;
 
@@ -112,6 +118,9 @@ public class Character : Role, ICharacter
     private void Resolving() // after this character's has being attacked
     {
         // happens before the loop of the first frame where the condition is met
+        if (_myTurn)
+            return;
+
         if (_data.CurrentHealth <= 0)
             Die();
 
@@ -147,25 +156,33 @@ public class Character : Role, ICharacter
     }
     public void Interact(InputAction.CallbackContext interactContext)
     {
+        // if not player ignore
         if (_characterType != CharacterType.Player)
             return;
 
+        // get character on click --------------------------------------------------------------
         Ray ray = _camera.ScreenPointToRay(_cursorPos);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
         if (hit.collider && hit.transform.root.TryGetComponent(out Character targetCharacter))
         {
             _lastCharacterClickedOn = targetCharacter;
-            Debug.Log($"Clicked on {_lastCharacterClickedOn.name}");
+            Debug.Log($"Clicked on {_lastCharacterClickedOn}");
         }
         else
         {
             _lastCharacterClickedOn = null;
             return;
         }
+        // -------------------------------------------------------------------------------------
 
         // to remove
-        OpenSkillMenu();
+
+        if (_myTurn && _state == Attacking)
+            OpenSkillMenu();
+
+        if (_state == OutsideOfCombat)
+            Debug.Log("interact outside of combat");
     }
 
     #region ICharacter
@@ -174,8 +191,18 @@ public class Character : Role, ICharacter
         if (!_lastCharacterClickedOn)
             return;
 
-        UIManager.Instance.CombatSkillMenu.gameObject.SetActive(true);
-        UIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(true);
+        switch (UIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
+        {
+            case true:
+                UIManager.Instance.CombatSkillMenu.gameObject.SetActive(false);
+                UIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(false);
+                break;
+            case false:
+                UIManager.Instance.CombatSkillMenu.gameObject.SetActive(true);
+                UIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(true);
+                break;
+        }
+        
         UIManager.Instance.RefreshCombatSkillMenuDisplay(_lastCharacterClickedOn, _camera.WorldToScreenPoint(_lastCharacterClickedOn.transform.position), _data.ActiveSkills, _data.CurrentLevel);
         // open skill menu
     }
@@ -192,7 +219,7 @@ public class Character : Role, ICharacter
     #region overrides
     public override string ToString()
     {
-        return $"Name: {_data.name}, Role: {_role}, Lvl: {_data.CurrentLevel}";
+        return $"{_data.name}, Role: {_role}, Lvl: {_data.CurrentLevel}";
     }
     public override bool Equals(object other)
     {
