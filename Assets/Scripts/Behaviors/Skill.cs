@@ -5,7 +5,7 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
     private Character _owner;
-    public Character Owner { get; set; }
+    public Character Owner { get => _owner; set => _ = value; }
 
     public virtual void Activate()
     {
