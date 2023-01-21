@@ -5,10 +5,10 @@ using UnityEngine;
 public class Skill : MonoBehaviour, ISkill
 {
     [SerializeField] private string _name;
-    public string Name { get => _name; set => _name = value; }
+    public string Name { get => _name; set => _ = value; }
 
     private Character _invokerC;
-    public Character InvokerC { get => _invokerC; set => _invokerC = value; }
+    public Character InvokerC { get => _invokerC; set => _ = value; }
 
     public virtual void Activate()
     {
