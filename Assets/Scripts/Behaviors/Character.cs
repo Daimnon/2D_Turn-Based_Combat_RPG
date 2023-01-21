@@ -14,10 +14,10 @@ public class Character : Role, ICharacter
     [SerializeField] private CharacterData _data;
     public CharacterData Data => _data;
 
-    [SerializeField] private SpriteRenderer _characterGraphics;
-    [SerializeField] private CharacterAnimations _animations;
+    //[SerializeField] private CharacterAnimations _animations;
+    //[SerializeField] private SpriteRenderer _characterSpriteRenderer;
     [SerializeField] private Character _lastCharacterClickedOn;
-    [SerializeField] private bool _startCombat = false, _finishedCombat = false, _myTurn = false, _startWaiting = false, _finishedWaiting = false,
+    [SerializeField] private bool _startCombat = false, _inCombat = false, _finishedCombat = false, _myTurn = false, _startWaiting = false, _finishedWaiting = false,
                                   _startAttacking = false, _finishedAttacking = false, _startResolving = false, _finishedResolving = false, _isAlive = true;
 
     public Character LastCharacterClickedOn => _lastCharacterClickedOn;
@@ -63,6 +63,9 @@ public class Character : Role, ICharacter
     private void OutsideOfCombat() // while situation where combat do not take place
     {
         // happens before the loop of the first frame where the condition is met
+        if (_inCombat)
+            _inCombat = false;
+
         if (_myTurn)
             _myTurn = false;
 
@@ -162,13 +165,16 @@ public class Character : Role, ICharacter
 
         }
 
-        _characterGraphics.material.mainTexture = _data.SpriteSheet;
+        //_characterSpriteRenderer.material.mainTexture = _data.SpriteSheet;
+        //_characterSpriteRenderer.sprite = _data.SpriteSheet.
         _state = OutsideOfCombat;
+
+        _state = Attacking;
     }
     public void Interact(InputAction.CallbackContext interactContext)
     {
         // if not player ignore
-        if (this is Player)
+        if (!(this is Player))
             return;
 
         // get character on click --------------------------------------------------------------
@@ -187,8 +193,6 @@ public class Character : Role, ICharacter
         }
         // -------------------------------------------------------------------------------------
 
-        // to remove
-
         if (_myTurn && _state == Attacking)
             OpenSkillMenu();
 
@@ -202,6 +206,8 @@ public class Character : Role, ICharacter
         if (!_lastCharacterClickedOn)
             return;
 
+        UIManager.Instance.RefreshCombatSkillMenuDisplay(_lastCharacterClickedOn, _camera.WorldToScreenPoint(_lastCharacterClickedOn.transform.position), _data.ActiveSkills, _lastCharacterClickedOn._data.CurrentLevel);
+
         switch (UIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
         {
             case true:
@@ -213,9 +219,6 @@ public class Character : Role, ICharacter
                 UIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(true);
                 break;
         }
-        
-        UIManager.Instance.RefreshCombatSkillMenuDisplay(_lastCharacterClickedOn, _camera.WorldToScreenPoint(_lastCharacterClickedOn.transform.position), _data.ActiveSkills, _data.CurrentLevel);
-        // open skill menu
     }
     public void DoSkill(int slotNum)
     {

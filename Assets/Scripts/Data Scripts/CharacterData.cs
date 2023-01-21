@@ -14,7 +14,7 @@ public class CharacterData : ScriptableObject
     [SerializeField] private int _vigor, _strength, _intelligence, _speed;
     [SerializeField] private int _totalSkillPoints, _spentSkillPoints, _availableSkillPoints;
     [SerializeField] private int _totalStatPoints, _spentStatPoints, _availableStatPoints;
-    [SerializeField] private Texture2D _spriteSheet;
+    //[SerializeField] private Texture2D _spriteSheet;
 
     [Header("Character Equipment")]
     [SerializeField] private HeadGear _headGear;
@@ -49,7 +49,7 @@ public class CharacterData : ScriptableObject
     public int TotalStatPoints { get => _totalStatPoints; set => _ = value; }
     public int SpentStatPoints { get => _spentStatPoints; set => _ = value; }
     public int AvailableStatPoints { get => _availableStatPoints; set => _ = value; }
-    public Texture2D SpriteSheet => _spriteSheet;
+    //public Texture2D SpriteSheet => _spriteSheet;
     public Weapon PrimaryOneHanded { get => _primaryOneHanded; set => _ = value; }
     public Weapon SecondaryOneHanded { get => _secondaryOneHanded; set => _ = value; }
     public Weapon TwoHanded { get => _twoHanded; set => _ = value; }

@@ -24,8 +24,15 @@ public class UIManager : MonoBehaviour
     {
         _combatSkillMenu.transform.position = newPosUI;
 
-        for (int i = 0; i < _combatSkillMenu.Skills.Length -1; i++)
+        for (int i = 0; i < _combatSkillMenu.Skills.Length; i++)
         {
+            if (!activeSkills[i])
+            {
+                _combatSkillMenu.Skills[i].interactable = false;
+                continue;
+            }
+
+            //activeSkills[i].Owner = lastCharacterClickedOn;
             _combatSkillMenu.Skills[i].onClick.RemoveAllListeners();
             _combatSkillMenu.Skills[i].onClick.AddListener(delegate { activeSkills[i].Activate(); });
             Debug.Log($"Populated {_combatSkillMenu.Skills[i].name} successfuly");
