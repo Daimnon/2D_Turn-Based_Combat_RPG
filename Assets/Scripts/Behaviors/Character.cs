@@ -14,6 +14,8 @@ public class Character : Role, ICharacter
     [SerializeField] private CharacterData _data;
     public CharacterData Data => _data;
 
+    [SerializeField] private SpriteRenderer _characterGraphics;
+    [SerializeField] private CharacterAnimations _animations;
     [SerializeField] private Character _lastCharacterClickedOn;
     [SerializeField] private bool _startCombat = false, _finishedCombat = false, _myTurn = false, _startWaiting = false, _finishedWaiting = false,
                                   _startAttacking = false, _finishedAttacking = false, _startResolving = false, _finishedResolving = false, _isAlive = true;
@@ -32,7 +34,7 @@ public class Character : Role, ICharacter
     }
     private void OnEnable()
     {
-        if (_characterType == CharacterType.Player)
+        if (this is Player)
         {
             _interact.Enable();
             _interact.performed += Interact;
@@ -40,7 +42,7 @@ public class Character : Role, ICharacter
     }
     private void Update()
     {
-        if (_characterType == CharacterType.Player)
+        if (this is Player)
         {
             _cursorPos = _cursor.position.ReadValue();
         }
@@ -50,7 +52,7 @@ public class Character : Role, ICharacter
     }
     private void OnDisable()
     {
-        if (_characterType == CharacterType.Player)
+        if (this is Player)
         {
             _interact.Disable();
         }
@@ -144,20 +146,29 @@ public class Character : Role, ICharacter
 
     private void Initialize()
     {
-        if (_characterType == CharacterType.Player)
+        if (this is Player)
         {
             _playerControls = new PlayerControls();
             _camera = Camera.main;
             _cursor = Mouse.current;
             _interact = _playerControls.Player.Interact;
         }
-        
+        else if (this is Ally)
+        {
+
+        }
+        else
+        {
+
+        }
+
+        _characterGraphics.material.mainTexture = _data.SpriteSheet;
         _state = OutsideOfCombat;
     }
     public void Interact(InputAction.CallbackContext interactContext)
     {
         // if not player ignore
-        if (_characterType != CharacterType.Player)
+        if (this is Player)
             return;
 
         // get character on click --------------------------------------------------------------
