@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ public class CombatManager : MonoBehaviour
 
     private Character[] _playerParty, _enemyParty;
     private List<Character> _combatParticipantsSortedByTurn;
+
+    public event Action OnAttackCompleted;
 
     private void Awake()
     {
@@ -36,6 +39,14 @@ public class CombatManager : MonoBehaviour
         // set new player party by player + allys amount & populate it
         // set new enemy party by num of currently faced enemies & populate it
     }
+
+    #region Events
+    public void OnAttackComplete()
+    {
+        if (OnAttackCompleted != null)
+            OnAttackCompleted.Invoke();
+    }
+    #endregion
 
     // if not using return can be simplified
     private Character Spawn(bool isPlayerParty, GameObject characterPrefab)
@@ -76,16 +87,4 @@ public class CombatManager : MonoBehaviour
     {
         return (attackerC.transform.position - recieverC.transform.position).normalized;
     }
-
-
-
-    /*
-     * Pre-Execute - Occurs before the ability strikes. Usually reserved for reaction effects that modify the ability attributes.
-     * On Hit - Occurs when the ability scores a hit.
-     * On Miss - Occurs when the ability doesn't score a hit (i.e. a "Miss"). Likely not used by the game at all.
-     * On Crit - Occurs when the ability scores a crit. The ability has to score a hit first before the game checks for critical hits.
-     * On Kill - Occurs when the ability kills an enemy. The ability has to score a hit first before the game checks for killing blows.
-     * Post-Execute - Occurs after the ability made it's last strike. Unlike the other phases, this one will occur exactly once per ability execution, regardless of how many times the ability strikes.
-     * Pre-Execute and Post-Execute phase will always occur when executing an ability, while the rest may not due to specific circumstances. For example, if the player doesn't score a crit with the selected ability, the On Crit phase will not occur.
-    */
 }

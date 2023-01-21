@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum CombatStates { Waiting, Attacking, Resolving }
+
 public class Character : Role, ICharacter
 {
-    private delegate void State();
-    private State _state;
+    private delegate void CombatState();
+    private CombatState _combatState;
 
     private PlayerControls _playerControls;
     private InputAction _interact;
@@ -16,16 +18,24 @@ public class Character : Role, ICharacter
 
     //[SerializeField] private CharacterAnimations _animations;
     //[SerializeField] private SpriteRenderer _characterSpriteRenderer;
+    
     [SerializeField] private Character _lastCharacterClickedOn;
-    [SerializeField] private bool _startCombat = false, _inCombat = false, _finishedCombat = false, _myTurn = false, _startWaiting = false, _finishedWaiting = false,
-                                  _startAttacking = false, _finishedAttacking = false, _startResolving = false, _finishedResolving = false, _isAlive = true;
+    [SerializeField] private bool _isMyTurn = false, _isInCombat = false, _isAlive = true;
+    private int _skillSlotToActivateNum;
 
     public Character LastCharacterClickedOn => _lastCharacterClickedOn;
-    public bool IsAlive { get => _isAlive; set => _ = value; }
+    public bool MyTurn { get => _isMyTurn; set => _isMyTurn = value; }
+    public bool IsInCombat { get => _isInCombat; set => _isInCombat = value; }
+    public bool IsAlive { get => _isAlive; set => _isAlive = value; }
+    public int SkillSlotToActivateNum { get => _skillSlotToActivateNum; set => _skillSlotToActivateNum = value; }
 
     private Camera _camera;
     private Mouse _cursor;
     private Vector2 _cursorPos;
+
+    #region Debug
+    private int _stateDebugCounter = 0;
+    #endregion
 
     #region MonoBehaviour Callbacks
     private void Awake()
@@ -47,8 +57,16 @@ public class Character : Role, ICharacter
             _cursorPos = _cursor.position.ReadValue();
         }
 
-        _state.Invoke();
-        Debug.Log($"Current player state: {_state.Method.Name}");
+        if (_isInCombat)
+        {
+            _combatState.Invoke();
+
+            if (_stateDebugCounter == 0)
+            {
+                Debug.Log($"{_data.Name}'s combat state is {_combatState.Method.Name}");
+                _stateDebugCounter++;
+            }
+        }
     }
     private void OnDisable()
     {
@@ -59,91 +77,149 @@ public class Character : Role, ICharacter
     }
     #endregion
 
-    #region States
-    private void OutsideOfCombat() // while situation where combat do not take place
-    {
-        // happens before the loop of the first frame where the condition is met
-        if (_inCombat)
-            _inCombat = false;
-
-        if (_myTurn)
-            _myTurn = false;
-
-        if (_finishedCombat)
-            _state = Waiting;
-        // ---------------------------------------------------------------------
-
-
-
-
-
-        // happens after the loop of the first frame where the condition is met
-        if (_startCombat)
-            _startCombat = false;
-    }
+    #region Combat States
+    //private void OutsideOfCombat() // while situation where combat do not take place
+    //{
+    //    // happens before the loop of the first frame where the condition is met
+    //    if (_inCombat)
+    //        _inCombat = false;
+    //
+    //    if (_myTurn)
+    //        _myTurn = false;
+    //
+    //    if (_finishedCombat)
+    //        _state = Waiting;
+    //    // ---------------------------------------------------------------------
+    //
+    //
+    //
+    //
+    //
+    //    // happens after the loop of the first frame where the condition is met
+    //    if (_startCombat)
+    //        _startCombat = false;
+    //}
+    //private void InitializeCombat()
+    //{
+    //    _startCombat = true;
+    //    _inCombat = true;
+    //
+    //    if (!_myTurn)
+    //        _state = Waiting;
+    //    else
+    //        _state = Attacking;
+    //}
     private void Waiting() // while waiting for this character's turn
     {
         // happens before the loop of the first frame where the condition is met
-        if (_finishedCombat)
-            _state = OutsideOfCombat;
 
-        if (_myTurn && _finishedWaiting)
-            _state = Attacking;
+        //if (_finishedCombat)
+        //    _state = OutsideOfCombat;
+    
+        //if (_myTurn && _finishedWaiting)
+        //    _state = Attacking;
         // ---------------------------------------------------------------------
-
-
-
-
-
+    
+    
+    
+    
+    
         // happens after the loop of the first frame where the condition is met
-        if (_startWaiting)
-            _startWaiting = false;
+        //if (_startWaiting)
+        //    _startWaiting = false;
     }
     private void Attacking() // while this character's attacks
     {
         // happens before the loop of the first frame where the condition is met
-        if (!_myTurn)
+        if (!_isMyTurn)
             return;
-
-        if (_finishedCombat)
-            _state = OutsideOfCombat;
-
-        if (_finishedAttacking)
-            _state = Waiting;
+    
+        //if (_finishedCombat)
+        //    _state = OutsideOfCombat;
+    
+        //if (_finishedAttacking)
+        //    _state = Waiting;
         // ---------------------------------------------------------------------
-
-
-
-
-
+    
+    
+    
+    
+    
         // happens after the loop of the first frame where the condition is met
-        if (_startAttacking)
-            _startAttacking = false;
+        //if (_startAttacking)
+        //    _startAttacking = false;
     }
     private void Resolving() // after this character's has being attacked
     {
         // happens before the loop of the first frame where the condition is met
-        if (_myTurn)
+        if (_isMyTurn)
             return;
-
+    
         if (_data.CurrentHealth <= 0)
             Die();
-
-        if (_finishedCombat)
-            _state = OutsideOfCombat;
-
-        if (_finishedResolving)
-            _state = Waiting;
+    
+        //if (_finishedCombat)
+        //    _state = OutsideOfCombat;
+    
+        //if (_finishedResolving)
+        //    _state = Waiting;
         // ---------------------------------------------------------------------
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
         // happens after the loop of the first frame where the condition is met
-        if (_startResolving)
-            _startResolving = false;
+        //if (_startResolving)
+        //    _startResolving = false;
+    }
+    #endregion
+
+    #region Combat Events
+    public void OnStartCombat()
+    {
+        // occurs when entering combat.
+    }
+    public void OnStartTurn()
+    {
+        // occurs when this character's turn has started.
+    }
+    public void OnAttack()
+    {
+        // occurs before the ability strikes. Usually reserved for reaction effects that modify the ability attributes.
+    }
+    public void OnAttackHit()
+    {
+        // occurs when the ability scores a hit.
+    }
+    public void OnAttackMiss()
+    {
+        // occurs when the ability doesn't score a hit (i.e. a "Miss"). Likely not used by the game at all.
+    }
+    public void OnAttackHitCrit()
+    {
+        // occurs when the ability scores a crit. The ability has to score a hit first before the game checks for critical hits.
+    }
+    public void OnAttackKill()
+    {
+        // occurs when the ability kills an enemy. The ability has to score a hit first before the game checks for killing blows.
+    }
+    public void OnAttackResolve()
+    {
+        // occurs after the ability made it's last strike. Unlike the other phases, this one will occur exactly once per ability execution, regardless of how many times the ability strikes.
+    }
+    public void OnDeath()
+    {
+        // occurs when current hp reach 0.
+    }
+    public void OnEndTurn()
+    {
+        // occurs when this character's turn has ended.
+    }
+    public void OnEndCombat()
+    {
+        // occurs if player survived the combat and all enemies are dealt with.
     }
     #endregion
 
@@ -155,6 +231,9 @@ public class Character : Role, ICharacter
             _camera = Camera.main;
             _cursor = Mouse.current;
             _interact = _playerControls.Player.Interact;
+
+            // to remove
+            _combatState = Attacking;
         }
         else if (this is Ally)
         {
@@ -167,9 +246,19 @@ public class Character : Role, ICharacter
 
         //_characterSpriteRenderer.material.mainTexture = _data.SpriteSheet;
         //_characterSpriteRenderer.sprite = _data.SpriteSheet.
+
+        /* temp comment -----------
         _state = OutsideOfCombat;
 
         _state = Attacking;
+        ------------------------- */
+    }
+    private void InitializeCombat()
+    {
+        if (!_isMyTurn)
+            _combatState = Waiting;
+        else
+            _combatState = Attacking;
     }
     public void Interact(InputAction.CallbackContext interactContext)
     {
@@ -181,23 +270,52 @@ public class Character : Role, ICharacter
         Ray ray = _camera.ScreenPointToRay(_cursorPos);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-        if (hit.collider && hit.transform.root.TryGetComponent(out Character targetCharacter))
+        if (_isInCombat)
         {
-            _lastCharacterClickedOn = targetCharacter;
-            Debug.Log($"Clicked on {_lastCharacterClickedOn}");
+            if (hit.collider && hit.transform.root.TryGetComponent(out Character targetCharacter))
+            {
+                _lastCharacterClickedOn = targetCharacter;
+
+                if (_isInCombat && _isMyTurn && _combatState == Attacking)
+                    OpenSkillMenu();
+                else if (_isInCombat && !_isMyTurn && _combatState == Waiting) ;
+
+                Debug.Log($"Clicked on {_lastCharacterClickedOn}");
+            }
         }
         else
         {
             _lastCharacterClickedOn = null;
-            return;
         }
+
         // -------------------------------------------------------------------------------------
 
-        if (_myTurn && _state == Attacking)
-            OpenSkillMenu();
+        
 
-        if (_state == OutsideOfCombat)
-            Debug.Log("interact outside of combat");
+        
+
+        
+
+
+    }
+
+    public void ChangeCombatState(CombatStates desiredState)
+    {
+        if (!_isInCombat)
+            return;
+
+        switch (desiredState)
+        {
+            case CombatStates.Waiting:
+                _combatState = Waiting;
+                break;
+            case CombatStates.Attacking:
+                _combatState = Attacking;
+                break;
+            case CombatStates.Resolving:
+                _combatState = Resolving;
+                break;
+        }
     }
 
     #region ICharacter
@@ -206,7 +324,7 @@ public class Character : Role, ICharacter
         if (!_lastCharacterClickedOn)
             return;
 
-        UIManager.Instance.RefreshCombatSkillMenuDisplay(_lastCharacterClickedOn, _camera.WorldToScreenPoint(_lastCharacterClickedOn.transform.position), _data.ActiveSkills, _lastCharacterClickedOn._data.CurrentLevel);
+        UIManager.Instance.RefreshCombatSkillMenuDisplay(this, _lastCharacterClickedOn, _camera.WorldToScreenPoint(_lastCharacterClickedOn.transform.position), _data.ActiveSkills, _lastCharacterClickedOn._data.CurrentLevel);
 
         switch (UIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
         {
@@ -220,9 +338,9 @@ public class Character : Role, ICharacter
                 break;
         }
     }
-    public void DoSkill(int slotNum)
+    public void ActivateSkill()
     {
-        // do skill
+        _data.ActiveSkills[SkillSlotToActivateNum].Activate();
     }
     public void Die()
     {

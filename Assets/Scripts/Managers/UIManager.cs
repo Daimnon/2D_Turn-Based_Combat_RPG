@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class UIManager : MonoBehaviour
 
     public CombatSkillMenu CombatSkillMenu => _combatSkillMenu;
 
+    private UnityAction[] _skillActions;
+
     private void Awake()
     {
         _instance = this;
@@ -20,7 +24,7 @@ public class UIManager : MonoBehaviour
     {
 
     }
-    public void RefreshCombatSkillMenuDisplay(Character lastCharacterClickedOn, Vector2 newPosUI, Skill[] activeSkills, int lvl)
+    public void RefreshCombatSkillMenuDisplay(Character invokingC, Character lastCharacterClickedOn, Vector2 newPosUI, Skill[] activeSkills, int lvl)
     {
         _combatSkillMenu.transform.position = newPosUI;
 
@@ -32,9 +36,16 @@ public class UIManager : MonoBehaviour
                 continue;
             }
 
-            //activeSkills[i].Owner = lastCharacterClickedOn;
+            //Destroy(_combatSkillMenu.Skills[i].GetComponent<Skill>());
+            //
+            //Skill desiredSkill = activeSkills[i].GetComponent<Skill>();
+            //Skill skillOnBtn = _combatSkillMenu.Skills[i].AddComponent<Skill>();
+            //skillOnBtn = desiredSkill;
+
+            activeSkills[i].InvokerC = invokingC;
+            invokingC.SkillSlotToActivateNum = i;
             _combatSkillMenu.Skills[i].onClick.RemoveAllListeners();
-            _combatSkillMenu.Skills[i].onClick.AddListener(delegate { activeSkills[i].Activate(); });
+            _combatSkillMenu.Skills[i].onClick.AddListener(invokingC.ActivateSkill);
             Debug.Log($"Populated {_combatSkillMenu.Skills[i].name} successfuly");
         }
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d48620f5b75a3546b36c48f93af7e1d, type: 3}
   m_Name: Ally Test
   m_EditorClassIdentifier: 
-  _name: 
+  _name: Ally Test
   _maxLevel: 0
   _currentLevel: 5
   _maxExp: 0

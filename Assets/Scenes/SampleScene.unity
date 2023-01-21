@@ -197,6 +197,7 @@ GameObject:
   - component: {fileID: 471202476}
   - component: {fileID: 471202475}
   - component: {fileID: 471202477}
+  - component: {fileID: 471202478}
   m_Layer: 5
   m_Name: Skill 5
   m_TagString: Skill Slot
@@ -306,6 +307,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &471202478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 471202472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ed3aa100a10b46b728b4faabe85cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotNum: 5
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,6 +450,7 @@ GameObject:
   - component: {fileID: 569190650}
   - component: {fileID: 569190649}
   - component: {fileID: 569190651}
+  - component: {fileID: 569190652}
   m_Layer: 5
   m_Name: Skill 0
   m_TagString: Skill Slot
@@ -545,6 +560,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &569190652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569190646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ed3aa100a10b46b728b4faabe85cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotNum: 0
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -730,6 +758,7 @@ GameObject:
   - component: {fileID: 882087674}
   - component: {fileID: 882087673}
   - component: {fileID: 882087675}
+  - component: {fileID: 882087676}
   m_Layer: 5
   m_Name: Skill 2
   m_TagString: Skill Slot
@@ -839,6 +868,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &882087676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882087670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ed3aa100a10b46b728b4faabe85cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotNum: 2
 --- !u!1 &898190315
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,6 +893,7 @@ GameObject:
   - component: {fileID: 898190319}
   - component: {fileID: 898190318}
   - component: {fileID: 898190320}
+  - component: {fileID: 898190321}
   m_Layer: 5
   m_Name: Skill 1
   m_TagString: Skill Slot
@@ -960,6 +1003,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &898190321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 898190315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ed3aa100a10b46b728b4faabe85cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotNum: 1
 --- !u!1 &917454459
 GameObject:
   m_ObjectHideFlags: 0
@@ -1272,6 +1328,7 @@ GameObject:
   - component: {fileID: 1180230533}
   - component: {fileID: 1180230532}
   - component: {fileID: 1180230534}
+  - component: {fileID: 1180230535}
   m_Layer: 5
   m_Name: Skill 7
   m_TagString: Skill Slot
@@ -1381,6 +1438,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1180230535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180230529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ed3aa100a10b46b728b4faabe85cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotNum: 7
 --- !u!1 &1252400480
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,6 +1857,7 @@ GameObject:
   - component: {fileID: 1578720573}
   - component: {fileID: 1578720572}
   - component: {fileID: 1578720574}
+  - component: {fileID: 1578720575}
   m_Layer: 5
   m_Name: Skill 4
   m_TagString: Skill Slot
@@ -1896,6 +1967,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1578720575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578720569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ed3aa100a10b46b728b4faabe85cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotNum: 4
 --- !u!1 &1761714044
 GameObject:
   m_ObjectHideFlags: 0
@@ -1908,6 +1992,7 @@ GameObject:
   - component: {fileID: 1761714048}
   - component: {fileID: 1761714047}
   - component: {fileID: 1761714049}
+  - component: {fileID: 1761714050}
   m_Layer: 5
   m_Name: Skill 3
   m_TagString: Skill Slot
@@ -2017,6 +2102,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1761714050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761714044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ed3aa100a10b46b728b4faabe85cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotNum: 3
 --- !u!1001 &1770054814
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2024,6 +2122,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6953649790550452018, guid: 598276047e902d64ab2f1f38a35c4391, type: 3}
+      propertyPath: _myTurn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6953649790550452018, guid: 598276047e902d64ab2f1f38a35c4391, type: 3}
+      propertyPath: _isMyTurn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6953649790550452018, guid: 598276047e902d64ab2f1f38a35c4391, type: 3}
+      propertyPath: _isInCombat
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6953649790550452019, guid: 598276047e902d64ab2f1f38a35c4391, type: 3}
       propertyPath: m_RootOrder
       value: 11
@@ -2086,6 +2196,7 @@ GameObject:
   - component: {fileID: 1826466019}
   - component: {fileID: 1826466018}
   - component: {fileID: 1826466020}
+  - component: {fileID: 1826466021}
   m_Layer: 5
   m_Name: Skill 6
   m_TagString: Skill Slot
@@ -2195,6 +2306,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1826466021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1826466015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423ed3aa100a10b46b728b4faabe85cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _slotNum: 6
 --- !u!1 &2022683879
 GameObject:
   m_ObjectHideFlags: 0
