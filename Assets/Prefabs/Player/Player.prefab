@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &730842935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 730842936}
+  m_Layer: 0
+  m_Name: AttackerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &730842936
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730842935}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6953649790550452019}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6953649788716994299
 GameObject:
   m_ObjectHideFlags: 0
@@ -492,6 +523,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8624258799568235446}
+  - {fileID: 730842936}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -540,16 +572,14 @@ MonoBehaviour:
   _characterType: 0
   _role: 0
   _data: {fileID: 11400000, guid: 7d030c1c0dd1af04187e0c429e576a37, type: 2}
+  _originalPosX: 5
+  _attackerPosTr: {fileID: 730842936}
   _lastCharacterClickedOn: {fileID: 0}
-  _startCombat: 0
-  _finishedCombat: 0
-  _myTurn: 0
-  _startWaiting: 0
-  _finishedWaiting: 0
-  _startAttacking: 0
-  _finishedAttacking: 0
-  _startResolving: 0
-  _finishedResolving: 0
+  _slideSpeed: 100
+  _isInCombat: 0
+  _isMyTurn: 0
+  _isAttackMelee: 1
+  _didWeaponMadeContactWithOpponent: 0
   _isAlive: 1
 --- !u!1001 &6953649789730345576
 PrefabInstance:

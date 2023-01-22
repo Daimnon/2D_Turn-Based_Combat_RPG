@@ -1,41 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public enum CombatStates { Waiting, Attacking, Resolving }
 
-public class Character : Role, ICharacter
+public class Character : Role
 {
-    private delegate void CombatState();
-    private CombatState _combatState;
+    protected delegate void CombatState();
+    protected CombatState _combatState;
 
-    private PlayerControls _playerControls;
-    private InputAction _interact;
+    [SerializeField] protected CharacterData _data;
+    public CharacterData Data { get => _data; set => _ = value; }
 
-    [SerializeField] private CharacterData _data;
-    public CharacterData Data => _data;
+    [SerializeField] protected float _originalPosX;
+    public float OriginalPosX => _originalPosX;
+
+    [SerializeField] protected Transform _attackerPosTr;
+    public Transform AttackerPosTr => _attackerPosTr;
 
     //[SerializeField] private CharacterAnimations _animations;
     //[SerializeField] private SpriteRenderer _characterSpriteRenderer;
-    
-    [SerializeField] private Character _lastCharacterClickedOn;
-    [SerializeField] private bool _isMyTurn = false, _isInCombat = false, _isAlive = true;
-    private int _skillSlotToActivateNum;
 
-    public Character LastCharacterClickedOn => _lastCharacterClickedOn;
-    public bool MyTurn { get => _isMyTurn; set => _ = value; }
+    [Header("Balancing")]
+    [SerializeField] protected float _slideSpeed;
+
+    [Header("Conditions")]
+    [SerializeField] protected bool _isInCombat = false, _isMyTurn = false, _isAttackMelee = true, _didWeaponMadeContactWithOpponent = false, _isAlive = true;
+
+    protected int _skillSlotToActivateNum;
+
     public bool IsInCombat { get => _isInCombat; set => _ = value; }
+    public bool MyTurn { get => _isMyTurn; set => _ = value; }
+    public bool IsAttackMelee { get => _isAttackMelee; set => _ = value; }
     public bool IsAlive { get => _isAlive; set => _ = value; }
     public int SkillSlotToActivateNum { get => _skillSlotToActivateNum; set => _ = value; }
 
-    private Camera _camera;
-    private Mouse _cursor;
-    private Vector2 _cursorPos;
-    private bool _isSubscribedToCombatEvents, _isUnsubscribedFromCombatEvents;
+    protected bool _isSubscribedToCombatEvents, _isUnsubscribedFromCombatEvents;
 
     #region Debug
-    private int _stateDebugCounter = 0;
+    protected int _stateDebugCounter = 0;
     #endregion
 
     #region MonoBehaviour Callbacks
@@ -43,35 +48,36 @@ public class Character : Role, ICharacter
     {
         InitializeCharacter();
     }
-    private void OnEnable()
-    {
-        if (this is Player)
-        {
-            _interact.Enable();
-            _interact.performed += Interact;
-        }
-    }
     private void Update()
     {
-        if (this is Player)
-        {
-            _cursorPos = _cursor.position.ReadValue();
-        }
-
         if (_isInCombat)
         {
             _combatState.Invoke();
 
             if (!_isSubscribedToCombatEvents)
             {
-                CombatManager.Instance.OnStartCombatByCharacter -= OnStartCombat;
-                _isSubscribedToCombatEvents = true;
-                _isUnsubscribedFromCombatEvents = false;
+                //_isUnsubscribedFromCombatEvents = false;
+                //
+                //if (this is Enemy && !CombatManager.Instance.EnemyParty[0])
+                //    CombatManager.Instance.EnemyParty[0] = this;
+                //else if (this is Enemy && !CombatManager.Instance.EnemyParty[1])
+                //    CombatManager.Instance.EnemyParty[1] = this;
+                //else if (this is Enemy && !CombatManager.Instance.EnemyParty[0])
+                //    CombatManager.Instance.EnemyParty[2] = this;
+                //else if (this is Player)
+                //    CombatManager.Instance.PlayerParty[0] = this;
+                //else if (!CombatManager.Instance.PlayerParty[1])
+                //    CombatManager.Instance.PlayerParty[1] = this;
+                //else if (!CombatManager.Instance.PlayerParty[0])
+                //    CombatManager.Instance.PlayerParty[2] = this;
+                //
+                //_isSubscribedToCombatEvents = true;
+                //CombatManager.Instance.OnStartCombatByCharacter -= OnStartCombat;
             }
 
             if (_stateDebugCounter == 0)
             {
-                Debug.Log($"{_data.Name}'s combat state is {_combatState.Method.Name}");
+                Debug.Log($"{name}'s combat state is {_combatState.Method.Name}");
                 _stateDebugCounter++;
             }
         }
@@ -82,50 +88,15 @@ public class Character : Role, ICharacter
             _isSubscribedToCombatEvents = false;
         }
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
-        if (this is Player)
-        {
-            _interact.Disable();
-        }
-
-        
+        if (!_isUnsubscribedFromCombatEvents)
+            UnSubscribeAllCombatEvents();
     }
     #endregion
 
     #region Combat States
-    //private void OutsideOfCombat() // while situation where combat do not take place
-    //{
-    //    // happens before the loop of the first frame where the condition is met
-    //    if (_inCombat)
-    //        _inCombat = false;
-    //
-    //    if (_myTurn)
-    //        _myTurn = false;
-    //
-    //    if (_finishedCombat)
-    //        _state = Waiting;
-    //    // ---------------------------------------------------------------------
-    //
-    //
-    //
-    //
-    //
-    //    // happens after the loop of the first frame where the condition is met
-    //    if (_startCombat)
-    //        _startCombat = false;
-    //}
-    //private void InitializeCombat()
-    //{
-    //    _startCombat = true;
-    //    _inCombat = true;
-    //
-    //    if (!_myTurn)
-    //        _state = Waiting;
-    //    else
-    //        _state = Attacking;
-    //}
-    private void Waiting() // while waiting for this character's turn
+    protected virtual void Waiting() // while waiting for this character's turn
     {
         // happens before the loop of the first frame where the condition is met
 
@@ -136,28 +107,69 @@ public class Character : Role, ICharacter
         // happens after the loop of the first frame where the condition is met
 
     }
-    private void Attacking() // while this character's attacks
+    protected virtual void Attacking() // while this character's is attacking
     {
         // happens before the loop of the first frame where the condition is met
-
         if (!_isMyTurn)
             return;
 
+        /*if (!LastCharacterClickedOn)
+            return;*/
         // ---------------------------------------------------------------------
 
-        // logic here
+        
+        if (_didWeaponMadeContactWithOpponent && transform.position.x >= OriginalPosX)
+        {
+            transform.position = new(OriginalPosX, transform.position.y, transform.position.z);
+            _didWeaponMadeContactWithOpponent = false;
+            ChangeCombatState(CombatStates.Waiting);
+        }
+        if (_didWeaponMadeContactWithOpponent)
+        {
+            SlideTowardOriginalPos();
+        }
+        /*else if (transform.position == LastCharacterClickedOn.AttackerPosTr.position && CheckWeaponCollisionWithOpponent())
+        {
+            _didWeaponMadeContactWithOpponent = CheckWeaponCollisionWithOpponent() ? TryHitOpponent() : false;
+
+            if (_didWeaponMadeContactWithOpponent)
+                CombatManager.Instance.InvokeAttackResolveByOpponent(_lastCharacterClickedOn);
+        }
+        else if (transform.position == LastCharacterClickedOn.AttackerPosTr.position && !CheckWeaponCollisionWithOpponent()) // in attacker position and weapon did not contact opponent
+        {
+            return;
+
+            // try to hit
+            // invoke correct combat event
+            //
+        }
+        else if (transform.position.x > LastCharacterClickedOn.AttackerPosTr.position.x)
+        {
+            transform.position = LastCharacterClickedOn.AttackerPosTr.position;
+        }
+        else if (!(transform.position.x >= LastCharacterClickedOn.AttackerPosTr.position.x))
+        {
+            if (_isAttackMelee)
+            {
+                SlideTowardsOpponentAttackerPos();
+            }
+            else
+            {
+
+            }
+        }*/
 
         // happens after the loop of the first frame where the condition is met
 
     }
-    private void Resolving() // after this character's has being attacked
+    protected virtual void Resolving() // after this character's has being attacked
     {
         // happens before the loop of the first frame where the condition is met
         if (_isMyTurn)
             return;
     
-        if (_data.CurrentHealth <= 0)
-            Die();
+        /*if (_data.CurrentHealth <= 0)
+            Die();*/
 
         //if (_finishedResolving)
         //    _state = Waiting;
@@ -171,77 +183,70 @@ public class Character : Role, ICharacter
     #endregion
 
     #region Combat Events
-    public void OnStartCombat(Character invokerC) // occurs when entering combat.
+    public virtual void OnStartTurn(Character invokerC) // occurs when this character's turn has started.
     {   
         if (invokerC == this)
         {
-            InitializeCombat();
+            ChangeCombatState(CombatStates.Waiting);
         }
     }
-    public void OnStartTurn(Character invokerC) // occurs when this character's turn has started.
-    {   
-        if (invokerC == this)
-        {
-            ChangeCombatState(CombatStates.Attacking);
-        }
-    }
-    public void OnAttack(Character invokerC) // occurs before the ability strikes. Usually reserved for reaction effects that modify the ability attributes.
+    public virtual void OnAttack(Character invokerC) // occurs before the ability strikes. Usually reserved for reaction effects that modify the ability attributes.
     {
         if (invokerC == this)
         {
-
+            _combatState = Attacking;
         }  
     }
-    public void OnAttackHit(Character invokerC) // occurs when the ability scores a hit.
+    public virtual void OnAttackHit(Character invokerC) // occurs when the ability scores a hit.
     {
         if (invokerC == this)
         {
 
         }
     }
-    public void OnAttackMiss(Character invokerC) // occurs when the ability doesn't score a hit (i.e. a "Miss"). Likely not used by the game at all.
+    public virtual void OnAttackMiss(Character invokerC) // occurs when the ability doesn't score a hit (i.e. a "Miss"). Likely not used by the game at all.
     {
         if (invokerC == this)
         {
 
         } 
     }
-    public void OnAttackHitCrit(Character invokerC) // occurs when the ability scores a crit. The ability has to score a hit first before the game checks for critical hits.
+    public virtual void OnAttackHitCrit(Character invokerC) // occurs when the ability scores a crit. The ability has to score a hit first before the game checks for critical hits.
     {
         if (invokerC == this)
         {
 
         }  
     }
-    public void OnAttackKill(Character invokerC) // occurs when the ability kills an enemy. The ability has to score a hit first before the game checks for killing blows.
+    public virtual void OnAttackKill(Character invokerC) // occurs when the ability kills an enemy. The ability has to score a hit first before the game checks for killing blows.
     {
         if (invokerC == this)
         {
             // add exp to combat conclusion
         }
     }
-    public void OnAttackResolve(Character invokerC) // occurs after the ability made it's last strike. Unlike the other phases, this one will occur exactly once per ability execution, regardless of how many times the ability strikes.
+    public virtual void OnAttackResolve(Character invokerC) // occurs after the ability made it's last strike. Unlike the other phases, this one will occur exactly once per ability execution, regardless of how many times the ability strikes.
     {
         if (invokerC == this)
         {
             ChangeCombatState(CombatStates.Resolving);
         }
     }
-    public void OnDeath(Character invokerC) // occurs when current hp reach 0.
+    public virtual void OnDeath(Character invokerC) // occurs when current hp reach 0.
     {
         if (invokerC == this)
         {
-            Die();
+            //Die();
         }
     }
-    public void OnEndTurn(Character invokerC) // occurs when this character's turn has ended.
+    public virtual void OnEndTurn(Character invokerC) // occurs when this character's turn has ended.
     {
         if (invokerC == this)
         {
             ChangeCombatState(CombatStates.Waiting);
         }
     }
-    public void OnEndCombat(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.
+    public virtual void OnEndCombat(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.
     {
         if (invokerC == this)
         {
@@ -249,56 +254,36 @@ public class Character : Role, ICharacter
         }
     }
 
-    private void SubscribeCombatEventsExceptOnStartCombat()
+    protected void SubscribeCombatEventsExceptOnStartCombat()
     {
         CombatManager.Instance.OnStartTurnByCharacter += OnStartTurn;
         CombatManager.Instance.OnAttackByCharacter += OnAttack;
         CombatManager.Instance.OnAttackHitByCharacter += OnAttackHit;
         CombatManager.Instance.OnAttackMissByCharacter += OnAttackMiss;
         CombatManager.Instance.OnAttackHitCritByCharacter += OnAttackHitCrit;
-        CombatManager.Instance.OnAttackKillByCharacter += OnAttackKill;
-        CombatManager.Instance.OnAttackResolveByCharacter += OnAttackResolve;
+        CombatManager.Instance.OnAttackKillOpponent += OnAttackKill;
+        CombatManager.Instance.OnAttackResolveByOpponent += OnAttackResolve;
         CombatManager.Instance.OnDeathByCharacter += OnDeath;
         CombatManager.Instance.OnEndTurnByCharacter += OnEndTurn;
         CombatManager.Instance.OnEndCombatByCharacter += OnEndCombat;
     }
-    private void UnSubscribeAllCombatEvents()
+    protected void UnSubscribeAllCombatEvents()
     {
-        CombatManager.Instance.OnStartCombatByCharacter -= OnStartCombat;
         CombatManager.Instance.OnStartTurnByCharacter -= OnStartTurn;
         CombatManager.Instance.OnAttackByCharacter -= OnAttack;
         CombatManager.Instance.OnAttackHitByCharacter -= OnAttackHit;
         CombatManager.Instance.OnAttackMissByCharacter -= OnAttackMiss;
         CombatManager.Instance.OnAttackHitCritByCharacter -= OnAttackHitCrit;
-        CombatManager.Instance.OnAttackKillByCharacter -= OnAttackKill;
-        CombatManager.Instance.OnAttackResolveByCharacter -= OnAttackResolve;
+        CombatManager.Instance.OnAttackKillOpponent -= OnAttackKill;
+        CombatManager.Instance.OnAttackResolveByOpponent -= OnAttackResolve;
         CombatManager.Instance.OnDeathByCharacter -= OnDeath;
         CombatManager.Instance.OnEndTurnByCharacter -= OnEndTurn;
         CombatManager.Instance.OnEndCombatByCharacter -= OnEndCombat;
     }
     #endregion
 
-    private void InitializeCharacter()
+    protected virtual void InitializeCharacter()
     {
-        if (this is Player)
-        {
-            _playerControls = new PlayerControls();
-            _camera = Camera.main;
-            _cursor = Mouse.current;
-            _interact = _playerControls.Player.Interact;
-
-            // to remove
-            _combatState = Attacking;
-        }
-        else if (this is Ally)
-        {
-
-        }
-        else
-        {
-
-        }
-
         //_characterSpriteRenderer.material.mainTexture = _data.SpriteSheet;
         //_characterSpriteRenderer.sprite = _data.SpriteSheet.
 
@@ -308,46 +293,32 @@ public class Character : Role, ICharacter
         _state = Attacking;
         ------------------------- */
     }
-    private void InitializeCombat()
-    {
-        SubscribeCombatEventsExceptOnStartCombat();
 
-        if (!_isMyTurn)
-            _combatState = Waiting;
-        else
-            _combatState = Attacking;
+
+    protected virtual void SlideTowardsOpponentAttackerPos()
+    {
+        //transform.position += _slideSpeed * Time.deltaTime * (Vector3)CombatManager.Instance.GetAttackDirection(this, LastCharacterClickedOn);
     }
-    public void Interact(InputAction.CallbackContext interactContext)
+    protected virtual void SlideTowardOriginalPos()
     {
-        // if not player ignore
-        if (!(this is Player))
-            return;
+        //transform.position += _slideSpeed * Time.deltaTime * _lastCharacterClickedOn.AttackerPosTr.position - new Vector3(_originalPosX, transform.position.y, transform.position.z);
+    }
+    protected virtual bool CheckWeaponCollisionWithOpponent()
+    {
+        bool didWeaponMadeContactWithOpponent = false; // didThisHappen ? yesItDid : NoItDidn't
+        // if weapon didn't made contact with opponent condition should be true
 
-        // get character on click --------------------------------------------------------------
-        Ray ray = _camera.ScreenPointToRay(_cursorPos);
-        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+        // check if weapon colided with opponent, if so break, if not continue
 
-        if (_isInCombat)
-        {
-            if (hit.collider && hit.transform.root.TryGetComponent(out Character targetCharacter))
-            {
-                _lastCharacterClickedOn = targetCharacter;
-
-                if (_isInCombat && _isMyTurn && _combatState == Attacking)
-                    OpenSkillMenu();
-                else if (_isInCombat && !_isMyTurn && _combatState == Waiting) ;
-
-                Debug.Log($"Clicked on {_lastCharacterClickedOn}");
-            }
-        }
-        else
-        {
-            _lastCharacterClickedOn = null;
-        }
-        // -------------------------------------------------------------------------------------
-
+        return didWeaponMadeContactWithOpponent;
+        
+    }
+    protected virtual bool TryHitOpponent()
+    {
+        return false;
     }
 
+    
     public void ChangeCombatState(CombatStates desiredState)
     {
         if (!_isInCombat)
@@ -370,34 +341,8 @@ public class Character : Role, ICharacter
         }
     }
 
-    #region ICharacter
-    public void OpenSkillMenu()
-    {
-        if (!_lastCharacterClickedOn)
-            return;
-
-        UIManager.Instance.RefreshCombatSkillMenuDisplay(this, _lastCharacterClickedOn, _camera.WorldToScreenPoint(_lastCharacterClickedOn.transform.position), _data.ActiveSkills, _lastCharacterClickedOn._data.CurrentLevel);
-
-        switch (UIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
-        {
-            case true:
-                UIManager.Instance.CombatSkillMenu.gameObject.SetActive(false);
-                UIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(false);
-                break;
-            case false:
-                UIManager.Instance.CombatSkillMenu.gameObject.SetActive(true);
-                UIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(true);
-                break;
-        }
-    }
-    public void ActivateSkill()
-    {
-        _data.ActiveSkills[SkillSlotToActivateNum].Activate();
-    }
-    public void Die()
-    {
-        
-    }
+    #region Coroutines
+    
     #endregion
 
     #region overrides

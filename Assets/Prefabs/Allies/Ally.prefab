@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &769081016
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 769081017}
+  m_Layer: 0
+  m_Name: AttackerPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &769081017
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 769081016}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6890600146869168301}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6890600145396053635
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +405,7 @@ GameObject:
   - component: {fileID: -5123864683573904969}
   m_Layer: 0
   m_Name: Ally
-  m_TagString: Player
+  m_TagString: Ally
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -392,6 +423,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5228541008850166824}
+  - {fileID: 769081017}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -439,17 +471,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterType: 1
   _role: 0
-  _data: {fileID: 0}
+  _data: {fileID: 11400000, guid: 10334e466ae2fa045bfd3a403ffcc099, type: 2}
+  _originalPosX: -6.75
+  _attackerPosTr: {fileID: 769081017}
   _lastCharacterClickedOn: {fileID: 0}
-  _startCombat: 0
-  _finishedCombat: 0
-  _myTurn: 0
-  _startWaiting: 0
-  _finishedWaiting: 0
-  _startAttacking: 0
-  _finishedAttacking: 0
-  _startResolving: 0
-  _finishedResolving: 0
+  _slideSpeed: 100
+  _isInCombat: 0
+  _isMyTurn: 0
+  _isAttackMelee: 1
+  _didWeaponMadeContactWithOpponent: 0
   _isAlive: 1
 --- !u!1 &6890600147046883384
 GameObject:
@@ -624,7 +654,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -6230025740060627306, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Bounds.m_Center.y
-      value: 0.0019852817
+      value: 0.0019853413
       objectReference: {fileID: 0}
     - target: {fileID: -6230025740060627306, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Bounds.m_Extent.x
@@ -648,7 +678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -3060849959534994697, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Bounds.m_Center.y
-      value: -0.005891949
+      value: -0.0058918893
       objectReference: {fileID: 0}
     - target: {fileID: -3060849959534994697, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Bounds.m_Extent.x
@@ -680,7 +710,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 453119213043483923, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Bounds.m_Center.y
-      value: -0.0022667348
+      value: -0.002266705
       objectReference: {fileID: 0}
     - target: {fileID: 453119213043483923, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Bounds.m_Extent.x
@@ -720,7 +750,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7442082030318649162, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Bounds.m_Center.y
-      value: 0.000035136938
+      value: 0.000035107136
       objectReference: {fileID: 0}
     - target: {fileID: 7442082030318649162, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Bounds.m_Extent.x
