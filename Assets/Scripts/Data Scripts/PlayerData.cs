@@ -8,20 +8,26 @@ public class PlayerData : CharacterData
     #region back fields
     [Header("Player Info")]
     [SerializeField] private float _maxExp, _currentExp;
+    [SerializeField] private int _maxLevel;
     [SerializeField] private int _totalSkillPoints, _spentSkillPoints, _availableSkillPoints;
     [SerializeField] private int _totalStatPoints, _spentStatPoints, _availableStatPoints;
     //[SerializeField] private Texture2D _spriteSheet;
+
+    [Header("Ally Skills")]
+    [SerializeField] private List<Skill> _allAquiredSkills;
     #endregion
 
     #region properties
     public float MaxExp { get => _maxExp; set => _ = value; }
     public float CurrentExp { get => _currentExp; set => _ = value; }
+    public int MaxLevel { get => _maxLevel; set => _ = value; }
     public int TotalSkillPoints { get => _totalSkillPoints; set => _ = value; }
     public int SpentSkillPoints { get => _spentSkillPoints; set => _ = value; }
     public int AvailableSkillPoints { get => _availableSkillPoints; set => _ = value; }
     public int TotalStatPoints { get => _totalStatPoints; set => _ = value; }
     public int SpentStatPoints { get => _spentStatPoints; set => _ = value; }
     public int AvailableStatPoints { get => _availableStatPoints; set => _ = value; }
+    public List<Skill> AllAquiredSkills { get => _allAquiredSkills; set => _ = value; }
     //public Texture2D SpriteSheet => _spriteSheet;
     #endregion
 

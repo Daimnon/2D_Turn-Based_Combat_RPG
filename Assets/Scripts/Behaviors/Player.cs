@@ -286,13 +286,31 @@ public class Player : Character, IPlayer
                 break;
         }
     }
-    public void ActivateSkill()
+    #endregion
+
+    #region ICharacter
+    public override void ActivateSkill()
     {
         _data.ActiveSkills[SkillSlotToActivateNum].Activate();
     }
-    public void Die()
+    public override void Die()
     {
 
+    }
+    #endregion
+
+    #region overrides
+    public override string ToString()
+    {
+        return $"{_data.name}, Role: {_role}, Lvl: {_data.CurrentLevel}";
+    }
+    public override bool Equals(object other)
+    {
+        return base.Equals(other);
+    }
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
     }
     #endregion
 }

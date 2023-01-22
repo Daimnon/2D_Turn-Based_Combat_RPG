@@ -140,7 +140,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4922073802918329108}
-  - component: {fileID: 4922073802918329195}
   - component: {fileID: 8669414181720718874}
   m_Layer: 0
   m_Name: Enemy
@@ -166,36 +165,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4922073802918329195
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4922073802918329193}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: fc6feaf3be142c94a8d14c5dfe4f3af9, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!114 &8669414181720718874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,9 +182,8 @@ MonoBehaviour:
   _data: {fileID: 11400000, guid: d18726e2297f9274b8559fe53267603d, type: 2}
   _originalPosX: 5
   _attackerPosTr: {fileID: 747285576}
-  _lastCharacterClickedOn: {fileID: 0}
   _slideSpeed: 100
-  _isInCombat: 0
+  _isInCombat: 1
   _isMyTurn: 0
   _isAttackMelee: 1
   _didWeaponMadeContactWithOpponent: 0

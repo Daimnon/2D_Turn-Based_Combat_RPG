@@ -13,17 +13,12 @@ public class UIManager : MonoBehaviour
 
     public CombatSkillMenu CombatSkillMenu => _combatSkillMenu;
 
-    private UnityAction[] _skillActions;
-
     private void Awake()
     {
         _instance = this;
+        DontDestroyOnLoad(this);
     }
 
-    private void PopulateSkill()
-    {
-
-    }
     public void RefreshCombatSkillMenuDisplay(Character invokingC, Character lastCharacterClickedOn, Vector2 newPosUI, Skill[] activeSkills, int lvl)
     {
         _combatSkillMenu.transform.position = newPosUI;
@@ -35,12 +30,6 @@ public class UIManager : MonoBehaviour
                 _combatSkillMenu.Skills[i].interactable = false;
                 continue;
             }
-
-            //Destroy(_combatSkillMenu.Skills[i].GetComponent<Skill>());
-            //
-            //Skill desiredSkill = activeSkills[i].GetComponent<Skill>();
-            //Skill skillOnBtn = _combatSkillMenu.Skills[i].AddComponent<Skill>();
-            //skillOnBtn = desiredSkill;
 
             activeSkills[i].InvokerC = invokingC;
             invokingC.SkillSlotToActivateNum = i;

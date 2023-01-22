@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class CombatManager : MonoBehaviour
 {
@@ -11,11 +11,15 @@ public class CombatManager : MonoBehaviour
     public static CombatManager Instance => _instance;
 
     [SerializeField] private GameObject _playerPrefab, _allyPrefab, _enemyPrefab;
+    public GameObject PlayerPrefab => _playerPrefab;
+    public GameObject AllyPrefab => _allyPrefab;
+    public GameObject EnemyPrefab => _enemyPrefab;
 
-    private List<Character> _playerParty, _enemyParty, _combatParticipantsSortedByTurn;
+    [SerializeField] private List<Character> _playerParty, _combatParticipantsSortedByTurn;
+    [SerializeField] private List<Enemy> _enemyParty;
 
     public List<Character> PlayerParty { get => _playerParty; set => _ = value; }
-    public List<Character> EnemyParty { get => _enemyParty; set => _ = value; }
+    public List<Enemy> EnemyParty { get => _enemyParty; set => _ = value; }
     public List<Character> CombatParticipantsSortedByTurn { get => _combatParticipantsSortedByTurn; set => _ = value; }
 
     public event Action OnStartCombat;
@@ -27,7 +31,8 @@ public class CombatManager : MonoBehaviour
     {
         _instance = this;
         _playerParty = new List<Character>(3) { null, null, null };
-        _enemyParty = new List<Character>(3){ null, null, null };
+        _enemyParty = new List<Enemy>(3) { null, null, null };
+        DontDestroyOnLoad(this);
     }
 
     private void OnEnable()
@@ -44,6 +49,46 @@ public class CombatManager : MonoBehaviour
         // set new player party by player + allys amount & populate it
         // set new enemy party by num of currently faced enemies & populate it
     }
+
+    public void Initialize(int combatSceneId)
+    {
+        //move later
+        //PartyManager.Instance.Initialize();
+
+        SceneManager.LoadScene(combatSceneId);
+        // set new player party by player + allys amount & populate it
+        for (int i = 0; i < _playerParty.Count; i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    _playerParty[i] = Spawn(_playerPrefab.GetComponent<Player>(), _playerPrefab, 0);
+                    break;
+                case 1:
+                    _playerParty[i] = Spawn(_allyPrefab.GetComponent<Ally>(), _allyPrefab, 1);
+                    break;
+                case 2:
+                    _playerParty[i] = Spawn(_allyPrefab.GetComponent<Ally>(), _allyPrefab, 2);
+                    break;
+            }
+        }
+        for (int i = 0; i < _enemyParty.Count; i++)
+        {
+            switch (i)
+            {
+                case 0:
+                    _enemyParty[i] = Spawn(_enemyPrefab.GetComponent<Enemy>(), _enemyPrefab, 0);
+                    break;
+                case 1:
+                    _enemyParty[i] = Spawn(_enemyPrefab.GetComponent<Enemy>(), _enemyPrefab, 1);
+                    break;
+                case 2:
+                    _enemyParty[i] = Spawn(_enemyPrefab.GetComponent<Enemy>(), _enemyPrefab, 2);
+                    break;
+            }
+        }
+    }
+
 
     #region Events
     public void InvokeStartCombat() // occurs when entering combat.
@@ -137,86 +182,68 @@ public class CombatManager : MonoBehaviour
     #endregion
 
     // if not using return can be simplified
-    private Character Spawn(bool isPlayer, bool isPlayerParty, GameObject characterPrefab)
+    private Character Spawn(Character c, GameObject characterPrefab, int partyIndex)
     {
-        Vector2 spawnPos;
+        Vector2 spawnPos = Vector2.zero;
 
-        switch (isPlayerParty)
+        if (c is Ally)
         {
-            case true:
-                spawnPos = new(-5f, 0f);
-                break;
-            case false:
-                spawnPos = new(5f, 0f);
-                break;
+            switch (partyIndex)
+            {
+                case 1:
+                    spawnPos = new(x: -6.75f, y: 1f);
+                    (c as Ally).PartyIndex = partyIndex;
+                    break;
+                case 2:
+                    spawnPos = new(x: -6.75f, y: -1f);
+                    (c as Ally).PartyIndex = partyIndex;
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            spawnPos = new(x: -5f, y: 0f);
         }
 
-        /* if does not need the return value use this:
-         * Instantiate(characterPrefab, spawnPos, Quaternion.identity);
-           instead of the code below */
-
-        GameObject spawnC = Instantiate(characterPrefab, spawnPos, Quaternion.identity);
+        GameObject spawnC = Instantiate(characterPrefab, (Vector3)spawnPos, Quaternion.identity);
         return spawnC.GetComponent<Character>();
     }
-    public void Initialize()
+    private Enemy Spawn(Enemy e, GameObject characterPrefab, int partyIndex)
     {
-        // set new player party by player + allys amount & populate it
-        for (int i = 0; i < _maxPartyMembers; i++)
+        Vector2 spawnPos = Vector2.zero;
+
+        switch (partyIndex)
         {
-            Spawn(true, c.gameObject);
-        }
-        foreach (Character c in _playerParty)
-
-
-            // set new enemy party by num of currently faced enemies & populate it
-            foreach (Character c in _enemyParty)
-                Spawn(false, c.gameObject);
-        //if (!_isMyTurn)
-        //    _combatState = Waiting;
-        //else
-        //    _combatState = Attacking;
-
-        if (this is Enemy && !EnemyParty[0])
-        {
-            Instance.EnemyParty[0] = this;
-            Instance.Spawn(true, c.gameObject);
-        }
-        else if (this is Enemy && !Instance.EnemyParty[1])
-        {
-
-            EnemyParty[1] = this;
-        }
-        else if (this is Enemy && !Instance.EnemyParty[0])
-        {
-
-            EnemyParty[2] = this;
-        }
-        else if (this is Player)
-        {
-
-            PlayerParty[0] = this;
-        }
-        else if (!PlayerParty[1])
-        {
-
-            PlayerParty[1] = this;
-        }
-        else if (!PlayerParty[0])
-        {
-
-            PlayerParty[2] = this;
+            case 1:
+                spawnPos = new(x: 5f, y: 0f);
+                e.PartyIndex = partyIndex;
+                break;
+            case 2:
+                spawnPos = new(x: 6.75f, y: 1f);
+                e.PartyIndex = partyIndex;
+                break;
+            case 3:
+                spawnPos = new(x: 6.75f, y: -1f);
+                e.PartyIndex = partyIndex;
+                break;
+            default:
+                break;
         }
 
+        GameObject spawnE = Instantiate(characterPrefab, (Vector3)spawnPos, Quaternion.identity);
+        return spawnE.GetComponent<Enemy>();
     }
     private void SetTurnOrder()
     {
-        List<Character> turnOrder = new List<Character>();
+        List<Character> turnOrder = new();
 
         foreach (Character c in _playerParty)
             turnOrder.Add(c);
 
-        foreach (Character c in _enemyParty)
-            turnOrder.Add(c);
+        foreach (Enemy e in _enemyParty)
+            turnOrder.Add(e);
 
         // choose order by speed value
         _combatParticipantsSortedByTurn = turnOrder.OrderBy(o => o.Data.Speed).ToList();

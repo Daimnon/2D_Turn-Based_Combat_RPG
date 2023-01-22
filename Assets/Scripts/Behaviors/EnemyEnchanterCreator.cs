@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyWarriorCreator : EnemyCreator
+public class EnemyEnchanterCreator : EnemyCreator
 {
     [SerializeField] private List<EnemyData> _warriorEnemiesDataFiles;
     [SerializeField] private List<HeadGear> _warriorEnemiesHeadGrears;
@@ -26,7 +26,7 @@ public class EnemyWarriorCreator : EnemyCreator
         int randPrimaryOneHanded = Random.Range(0, _warriorEnemiesPrimaryOneHandeds.Count);
         int randSecondaryOneHanded = Random.Range(0, _warriorEnemiesSecondaryOneHandeds.Count);
         int randTwoHanded = Random.Range(0, _warriorEnemiesTwoHandeds.Count);
-        
+
 
         EnemyData data = new();
         data.name = name;
@@ -70,7 +70,7 @@ public class EnemyWarriorCreator : EnemyCreator
             randSkill = Random.Range(minSkill, _allSkills.Count + 1);
         }
 
-        newEnemy.DefinedRole = Roles.Warrior;
+        newEnemy.DefinedRole = Roles.Enchanter;
         return newEnemy;
     }
     public override Enemy CreateEnemyByRandomData()
@@ -104,7 +104,7 @@ public class EnemyWarriorCreator : EnemyCreator
         newEnemy.Data.FeetGear = data.FeetGear;
 
         newEnemy.Data.ActiveSkills = data.ActiveSkills;
-        newEnemy.DefinedRole = Roles.Warrior;
+        newEnemy.DefinedRole = Roles.Enchanter;
         return newEnemy;
     }
     public override Enemy CreateEnemyByData(EnemyData data)
@@ -135,7 +135,7 @@ public class EnemyWarriorCreator : EnemyCreator
         newEnemy.Data.FeetGear = data.FeetGear;
 
         newEnemy.Data.ActiveSkills = data.ActiveSkills;
-        newEnemy.DefinedRole = Roles.Warrior;
+        newEnemy.DefinedRole = Roles.Enchanter;
         return newEnemy;
     }
 }

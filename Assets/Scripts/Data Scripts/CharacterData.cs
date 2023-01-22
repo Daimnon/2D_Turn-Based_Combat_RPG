@@ -7,7 +7,7 @@ public class CharacterData : ScriptableObject
 {
     #region back fields
     [SerializeField] protected string _name;
-    [SerializeField] protected int _maxLevel, _currentLevel;
+    [SerializeField] protected int _currentLevel;
     [SerializeField] protected int _maxHealth, _currentHealth, _maxMana, _currentMana;
     [SerializeField] protected int _vigor, _strength, _intelligence, _speed;
     //[SerializeField] private Texture2D _spriteSheet;
@@ -21,13 +21,11 @@ public class CharacterData : ScriptableObject
     [SerializeField] protected Weapon _primaryOneHanded, _secondaryOneHanded, _twoHanded;
 
     [Header("Character Skills")]
-    [SerializeField] protected List<Skill> _allAquiredSkills;
     [SerializeField] protected Skill[] _activeSkills;
     #endregion
 
     #region properties
     public string Name { get => _name; set => _ = value; }
-    public int MaxLevel => _maxLevel;
     public int CurrentLevel { get => _currentLevel; set => _ = value; }
     public int MaxHealth { get => _maxHealth; set => _ = value; }
     public int CurrentHealth { get => _currentHealth; set => _ = value; }
@@ -46,7 +44,6 @@ public class CharacterData : ScriptableObject
     public BottomGear @BottomGear { get => _bottomGear; set => _ = value; }
     public HandsGear @HandsGear { get => _handsGear; set => _ = value; }
     public FeetGear @FeetGear { get => _feetGear; set => _ = value; }
-    public List<Skill> AllAquiredSkills { get => _allAquiredSkills; set => _ = value; }
     public Skill[] ActiveSkills { get => _activeSkills; set => _ = value; }
     #endregion
 }

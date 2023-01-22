@@ -15,13 +15,16 @@ public class PartyManager : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(this);
+    }
+    public void Initialize()
+    {
         _instance = this;
         _playerParty = new List<Character>(3) { GameManager.Instance.PlayerCharacter, null, null };
         _enemyParty = new List<Character>(3) { null, null, null };
         _potentialAllies = new List<Character>();
         _chosenAllies = new Ally[2];
     }
-
     public void AddNewAlly(Character newAlly)
     {
         _potentialAllies.Add(newAlly);

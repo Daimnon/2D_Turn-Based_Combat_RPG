@@ -9,7 +9,7 @@ public class EnemyData : CharacterData
     {
         _name = name;
 
-        _maxLevel = _currentLevel = _maxHealth = _currentHealth = _maxMana = _currentMana = _vigor = _strength = _intelligence = _speed = 0;
+        _currentLevel = _maxHealth = _currentHealth = _maxMana = _currentMana = _vigor = _strength = _intelligence = _speed = 0;
 
         _primaryOneHanded = _secondaryOneHanded = _twoHanded = null;
         _headGear = null;
@@ -18,7 +18,6 @@ public class EnemyData : CharacterData
         _handsGear = null;
         _feetGear = null;
 
-        _allAquiredSkills.Clear();
         _activeSkills = new Skill[8] { null, null, null, null, null, null, null, null };
     }
 }

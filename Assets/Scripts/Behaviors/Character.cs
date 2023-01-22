@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public enum CombatStates { Waiting, Attacking, Resolving }
 
-public class Character : Role
+public class Character : Role, ICharacter
 {
     protected delegate void CombatState();
     protected CombatState _combatState;
@@ -27,7 +27,8 @@ public class Character : Role
     [SerializeField] protected float _slideSpeed;
 
     [Header("Conditions")]
-    [SerializeField] protected bool _isInCombat = false, _isMyTurn = false, _isAttackMelee = true, _didWeaponMadeContactWithOpponent = false, _isAlive = true;
+    [SerializeField] protected bool _isInCombat = false;
+    [SerializeField] protected bool _isMyTurn = false, _isAttackMelee = true, _didWeaponMadeContactWithOpponent = false, _isAlive = true;
 
     protected int _skillSlotToActivateNum;
 
@@ -342,7 +343,18 @@ public class Character : Role
     }
 
     #region Coroutines
-    
+
+    #endregion
+
+    #region ICharacter
+    public virtual void ActivateSkill()
+    {
+        _data.ActiveSkills[SkillSlotToActivateNum].Activate();
+    }
+    public virtual void Die()
+    {
+
+    }
     #endregion
 
     #region overrides
