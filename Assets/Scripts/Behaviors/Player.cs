@@ -20,6 +20,7 @@ public class Player : Character, IPlayer
     private void Awake()
     {
         _data = _data as PlayerData;
+        Initialize();
     }
     private void OnEnable()
     {
@@ -222,7 +223,7 @@ public class Player : Character, IPlayer
     }
     #endregion
 
-    protected override void InitializeCharacter()
+    protected override void Initialize()
     {
         _playerControls = new PlayerControls();
         _camera = Camera.main;
@@ -272,17 +273,17 @@ public class Player : Character, IPlayer
         if (!_lastCharacterClickedOn)
             return;
 
-        UIManager.Instance.RefreshCombatSkillMenuDisplay(this, _lastCharacterClickedOn, _camera.WorldToScreenPoint(_lastCharacterClickedOn.transform.position), _data.ActiveSkills, _lastCharacterClickedOn.Data.CurrentLevel);
+        CombatUIManager.Instance.RefreshCombatSkillMenuDisplay(this, _lastCharacterClickedOn, _camera.WorldToScreenPoint(_lastCharacterClickedOn.transform.position), _data.ActiveSkills, _lastCharacterClickedOn.Data.CurrentLevel);
 
-        switch (UIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
+        switch (CombatUIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
         {
             case true:
-                UIManager.Instance.CombatSkillMenu.gameObject.SetActive(false);
-                UIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(false);
+                CombatUIManager.Instance.CombatSkillMenu.gameObject.SetActive(false);
+                CombatUIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(false);
                 break;
             case false:
-                UIManager.Instance.CombatSkillMenu.gameObject.SetActive(true);
-                UIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(true);
+                CombatUIManager.Instance.CombatSkillMenu.gameObject.SetActive(true);
+                CombatUIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(true);
                 break;
         }
     }

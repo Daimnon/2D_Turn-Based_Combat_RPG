@@ -22,12 +22,6 @@ public class GameManager : MonoBehaviour
         _instance = this;
         _playerCharacter = _playerPrefab.GetComponent<Player>();
 
-        CombatManager.Instance.OnStartCombat += OnCombatStart;
         DontDestroyOnLoad(this);
-    }
-
-    public void OnCombatStart()
-    {
-        CombatManager.Instance.Initialize(0);
     }
 }

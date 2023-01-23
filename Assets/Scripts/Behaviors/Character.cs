@@ -47,7 +47,7 @@ public class Character : Role, ICharacter
     #region MonoBehaviour Callbacks
     private void Awake()
     {
-        InitializeCharacter();
+        Initialize();
     }
     private void Update()
     {
@@ -283,13 +283,13 @@ public class Character : Role, ICharacter
     }
     #endregion
 
-    protected virtual void InitializeCharacter()
+    protected virtual void Initialize()
     {
         //_characterSpriteRenderer.material.mainTexture = _data.SpriteSheet;
         //_characterSpriteRenderer.sprite = _data.SpriteSheet.
 
+        _combatState = Waiting;
         /* temp comment -----------
-        _state = OutsideOfCombat;
 
         _state = Attacking;
         ------------------------- */

@@ -4,10 +4,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class UIManager : MonoBehaviour
+public class CombatUIManager : MonoBehaviour
 {
-    private static UIManager _instance;
-    public static UIManager Instance => _instance;
+    private static CombatUIManager _instance;
+    public static CombatUIManager Instance => _instance;
 
     [SerializeField] private CombatSkillMenu _combatSkillMenu;
 

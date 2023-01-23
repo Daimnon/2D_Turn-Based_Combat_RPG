@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CombatManager : MonoBehaviour
 {
@@ -17,6 +16,8 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private List<Character> _playerParty, _combatParticipantsSortedByTurn;
     [SerializeField] private List<Enemy> _enemyParty;
+    [SerializeField] private Transform[] _playerTr;
+    [SerializeField] private Transform[] _enemiesTr;
 
     public List<Character> PlayerParty { get => _playerParty; set => _ = value; }
     public List<Enemy> EnemyParty { get => _enemyParty; set => _ = value; }
@@ -55,7 +56,7 @@ public class CombatManager : MonoBehaviour
         //move later
         //PartyManager.Instance.Initialize();
 
-        SceneManager.LoadScene(combatSceneId);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(combatSceneId);
         // set new player party by player + allys amount & populate it
         for (int i = 0; i < _playerParty.Count; i++)
         {
