@@ -23,8 +23,8 @@ public class CombatManager : MonoBehaviour
     public List<Enemy> EnemyParty { get => _enemyParty; set => _ = value; }
     public List<Character> CombatParticipantsSortedByTurn { get => _combatParticipantsSortedByTurn; set => _ = value; }
 
-    public event Action OnStartCombat;
-    public event Action<Character> OnStartCombatByCharacter, OnStartTurnByCharacter, OnAttackByCharacter, OnAttackHitByCharacter, OnAttackMissByCharacter, OnAttackHitCritByCharacter, OnAttackKillOpponent, OnAttackResolveByOpponent, OnDeathByCharacter, OnEndTurnByCharacter, OnEndCombatByCharacter;
+    public event Action OnStartCombat, OnEndCombat;
+    public event Action<Character> OnStartCombatByCharacter, OnStartTurnByCharacter, OnAttackByCharacter, OnAttackHitByCharacter, OnAttackMissByCharacter, OnAttackHitCritByCharacter, OnAttackKillOpponent, OnAttackResolveByOpponent, OnDeathByCharacter, OnEndTurnByCharacter, OnPlayerVictory;
 
     private int _maxPartyMembers = 3;
 
@@ -38,7 +38,7 @@ public class CombatManager : MonoBehaviour
 
     private void OnEnable()
     {
-        
+        Initialize();
     }
     private void OnDisable()
     {
@@ -51,12 +51,11 @@ public class CombatManager : MonoBehaviour
         // set new enemy party by num of currently faced enemies & populate it
     }
 
-    public void Initialize(int combatSceneId)
+    private void Initialize()
     {
         //move later
         //PartyManager.Instance.Initialize();
 
-        UnityEngine.SceneManagement.SceneManager.LoadScene(combatSceneId);
         // set new player party by player + allys amount & populate it
         for (int i = 0; i < _playerParty.Count; i++)
         {
@@ -172,12 +171,21 @@ public class CombatManager : MonoBehaviour
             Debug.Log($"{invokerC.Data.Name} turn's ended");
         }
     }
-    public void InvokeEndCombatByCharacter(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.
+    
+    public void InvokeVictoryByCharacter(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.
     {
-        if (OnEndCombatByCharacter != null)
+        if (OnPlayerVictory != null)
         {
-            OnEndCombatByCharacter.Invoke(invokerC);
+            OnPlayerVictory.Invoke(invokerC);
             Debug.Log($"Combat ended, player won!");
+        }
+    }
+    public void InvokeEndCombat() // occurs if player survived the combat and all enemies are dealt with.
+    {
+        if (OnEndCombat != null)
+        {
+            OnEndCombat.Invoke();
+            Debug.Log($"Combat concluded");
         }
     }
     #endregion
@@ -217,15 +225,15 @@ public class CombatManager : MonoBehaviour
 
         switch (partyIndex)
         {
-            case 1:
+            case 0:
                 spawnPos = new(x: 5f, y: 0f);
                 e.PartyIndex = partyIndex;
                 break;
-            case 2:
+            case 1:
                 spawnPos = new(x: 6.75f, y: 1f);
                 e.PartyIndex = partyIndex;
                 break;
-            case 3:
+            case 2:
                 spawnPos = new(x: 6.75f, y: -1f);
                 e.PartyIndex = partyIndex;
                 break;

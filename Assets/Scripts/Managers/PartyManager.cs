@@ -16,6 +16,13 @@ public class PartyManager : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this);
+        CombatManager.Instance.OnStartCombat += OnStartCombat;
+        CombatManager.Instance.OnEndCombat += OnEndCombat;
+    }
+    private void OnDestroy()
+    {
+        CombatManager.Instance.OnStartCombat -= OnStartCombat;
+        CombatManager.Instance.OnEndCombat -= OnEndCombat;
     }
     public void Initialize()
     {
@@ -41,5 +48,13 @@ public class PartyManager : MonoBehaviour
     public void SetEnemyParty(Stage stage)
     {
 
+    }
+    public void OnStartCombat()
+    {
+
+    }
+    public void OnEndCombat()
+    {
+        
     }
 }

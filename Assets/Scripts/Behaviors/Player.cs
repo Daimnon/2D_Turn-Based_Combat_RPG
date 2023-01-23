@@ -187,39 +187,12 @@ public class Player : Character, IPlayer
             ChangeCombatState(CombatStates.Waiting);
         }
     }
-    public override void OnEndCombat(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.
+    public override void OnPlayerVictory(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.
     {
-        if (invokerC == this)
+        if ((invokerC is Player || invokerC is Ally) && invokerC == this)
         {
-            _isInCombat = false;
+            // win
         }
-    }
-
-    private void SubscribeCombatEventsExceptOnStartCombat()
-    {
-        CombatManager.Instance.OnStartTurnByCharacter += OnStartTurn;
-        CombatManager.Instance.OnAttackByCharacter += OnAttack;
-        CombatManager.Instance.OnAttackHitByCharacter += OnAttackHit;
-        CombatManager.Instance.OnAttackMissByCharacter += OnAttackMiss;
-        CombatManager.Instance.OnAttackHitCritByCharacter += OnAttackHitCrit;
-        CombatManager.Instance.OnAttackKillOpponent += OnAttackKill;
-        CombatManager.Instance.OnAttackResolveByOpponent += OnAttackResolve;
-        CombatManager.Instance.OnDeathByCharacter += OnDeath;
-        CombatManager.Instance.OnEndTurnByCharacter += OnEndTurn;
-        CombatManager.Instance.OnEndCombatByCharacter += OnEndCombat;
-    }
-    private void UnSubscribeAllCombatEvents()
-    {
-        CombatManager.Instance.OnStartTurnByCharacter -= OnStartTurn;
-        CombatManager.Instance.OnAttackByCharacter -= OnAttack;
-        CombatManager.Instance.OnAttackHitByCharacter -= OnAttackHit;
-        CombatManager.Instance.OnAttackMissByCharacter -= OnAttackMiss;
-        CombatManager.Instance.OnAttackHitCritByCharacter -= OnAttackHitCrit;
-        CombatManager.Instance.OnAttackKillOpponent -= OnAttackKill;
-        CombatManager.Instance.OnAttackResolveByOpponent -= OnAttackResolve;
-        CombatManager.Instance.OnDeathByCharacter -= OnDeath;
-        CombatManager.Instance.OnEndTurnByCharacter -= OnEndTurn;
-        CombatManager.Instance.OnEndCombatByCharacter -= OnEndCombat;
     }
     #endregion
 
@@ -229,6 +202,19 @@ public class Player : Character, IPlayer
         _camera = Camera.main;
         _cursor = Mouse.current;
         _interact = _playerControls.Player.Interact;
+
+        for (int i = 0; i < _data.ActiveSkills.Length; i++)
+        {
+            if (_data.ActiveSkills[i])
+                _data.ActiveSkills[i].InvokerC = this;
+        }
+        //foreach (Skill s in _data.ActiveSkills)
+        //{
+        //    if (s)
+        //        s.InvokerC = this;
+        //}
+
+        _combatState = Attacking;
     }
 
     protected override void SlideTowardsOpponentAttackerPos()
@@ -246,18 +232,16 @@ public class Player : Character, IPlayer
         Ray ray = _camera.ScreenPointToRay(_cursorPos);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-        if (_isInCombat)
+        if (hit.collider && hit.transform.root.TryGetComponent(out Character targetCharacter))
         {
-            if (hit.collider && hit.transform.root.TryGetComponent(out Character targetCharacter))
-            {
-                _lastCharacterClickedOn = targetCharacter;
 
-                if (_isInCombat && _isMyTurn && _combatState == Attacking)
-                    OpenSkillMenu();
-                else if (_isInCombat && !_isMyTurn && _combatState == Waiting) ;
+            _lastCharacterClickedOn = targetCharacter;
 
-                Debug.Log($"Clicked on {_lastCharacterClickedOn}");
-            }
+            if (_isMyTurn && _combatState == Attacking)
+                OpenSkillMenu();
+            else if (!_isMyTurn && _combatState == Waiting) ;
+
+            Debug.Log($"Clicked on {_lastCharacterClickedOn}");
         }
         else
         {
@@ -293,6 +277,7 @@ public class Player : Character, IPlayer
     public override void ActivateSkill()
     {
         _data.ActiveSkills[SkillSlotToActivateNum].Activate();
+        //(_data as CharacterData).ActiveSkills[SkillSlotToActivateNum].Activate();
     }
     public override void Die()
     {

@@ -27,12 +27,12 @@ public class Character : Role, ICharacter
     [SerializeField] protected float _slideSpeed;
 
     [Header("Conditions")]
-    [SerializeField] protected bool _isInCombat = false;
-    [SerializeField] protected bool _isMyTurn = false, _isAttackMelee = true, _didWeaponMadeContactWithOpponent = false, _isAlive = true;
+    [SerializeField]
+    protected bool _isMyTurn = false;
+    [SerializeField] protected bool _isAttackMelee = true, _didWeaponMadeContactWithOpponent = false, _isAlive = true;
 
     protected int _skillSlotToActivateNum;
 
-    public bool IsInCombat { get => _isInCombat; set => _ = value; }
     public bool MyTurn { get => _isMyTurn; set => _ = value; }
     public bool IsAttackMelee { get => _isAttackMelee; set => _ = value; }
     public bool IsAlive { get => _isAlive; set => _ = value; }
@@ -51,43 +51,41 @@ public class Character : Role, ICharacter
     }
     private void Update()
     {
-        if (_isInCombat)
+        _combatState.Invoke();
+
+        if (!_isSubscribedToCombatEvents)
         {
-            _combatState.Invoke();
-
-            if (!_isSubscribedToCombatEvents)
-            {
-                //_isUnsubscribedFromCombatEvents = false;
-                //
-                //if (this is Enemy && !CombatManager.Instance.EnemyParty[0])
-                //    CombatManager.Instance.EnemyParty[0] = this;
-                //else if (this is Enemy && !CombatManager.Instance.EnemyParty[1])
-                //    CombatManager.Instance.EnemyParty[1] = this;
-                //else if (this is Enemy && !CombatManager.Instance.EnemyParty[0])
-                //    CombatManager.Instance.EnemyParty[2] = this;
-                //else if (this is Player)
-                //    CombatManager.Instance.PlayerParty[0] = this;
-                //else if (!CombatManager.Instance.PlayerParty[1])
-                //    CombatManager.Instance.PlayerParty[1] = this;
-                //else if (!CombatManager.Instance.PlayerParty[0])
-                //    CombatManager.Instance.PlayerParty[2] = this;
-                //
-                //_isSubscribedToCombatEvents = true;
-                //CombatManager.Instance.OnStartCombatByCharacter -= OnStartCombat;
-            }
-
-            if (_stateDebugCounter == 0)
-            {
-                Debug.Log($"{name}'s combat state is {_combatState.Method.Name}");
-                _stateDebugCounter++;
-            }
+            //_isUnsubscribedFromCombatEvents = false;
+            //
+            //if (this is Enemy && !CombatManager.Instance.EnemyParty[0])
+            //    CombatManager.Instance.EnemyParty[0] = this;
+            //else if (this is Enemy && !CombatManager.Instance.EnemyParty[1])
+            //    CombatManager.Instance.EnemyParty[1] = this;
+            //else if (this is Enemy && !CombatManager.Instance.EnemyParty[0])
+            //    CombatManager.Instance.EnemyParty[2] = this;
+            //else if (this is Player)
+            //    CombatManager.Instance.PlayerParty[0] = this;
+            //else if (!CombatManager.Instance.PlayerParty[1])
+            //    CombatManager.Instance.PlayerParty[1] = this;
+            //else if (!CombatManager.Instance.PlayerParty[0])
+            //    CombatManager.Instance.PlayerParty[2] = this;
+            //
+            //_isSubscribedToCombatEvents = true;
+            //CombatManager.Instance.OnStartCombatByCharacter -= OnStartCombat;
         }
-        else if (!_isUnsubscribedFromCombatEvents)
+
+        if (_stateDebugCounter == 0)
         {
+            Debug.Log($"{name}'s combat state is {_combatState.Method.Name}");
+            _stateDebugCounter++;
+        }
+
+        //if (!_isUnsubscribedFromCombatEvents)
+        //{
             UnSubscribeAllCombatEvents();
-            _isUnsubscribedFromCombatEvents = true;
-            _isSubscribedToCombatEvents = false;
-        }
+        //    _isUnsubscribedFromCombatEvents = true;
+        //    _isSubscribedToCombatEvents = false;
+        //}
     }
     private void OnDestroy()
     {
@@ -247,11 +245,11 @@ public class Character : Role, ICharacter
             ChangeCombatState(CombatStates.Waiting);
         }
     }
-    public virtual void OnEndCombat(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.
+    public virtual void OnPlayerVictory(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.
     {
-        if (invokerC == this)
+        if ((invokerC is Player || invokerC is Ally) && invokerC == this)
         {
-            _isInCombat = false;
+            // win if not enemy
         }
     }
 
@@ -266,7 +264,7 @@ public class Character : Role, ICharacter
         CombatManager.Instance.OnAttackResolveByOpponent += OnAttackResolve;
         CombatManager.Instance.OnDeathByCharacter += OnDeath;
         CombatManager.Instance.OnEndTurnByCharacter += OnEndTurn;
-        CombatManager.Instance.OnEndCombatByCharacter += OnEndCombat;
+        CombatManager.Instance.OnPlayerVictory += OnPlayerVictory;
     }
     protected void UnSubscribeAllCombatEvents()
     {
@@ -279,20 +277,14 @@ public class Character : Role, ICharacter
         CombatManager.Instance.OnAttackResolveByOpponent -= OnAttackResolve;
         CombatManager.Instance.OnDeathByCharacter -= OnDeath;
         CombatManager.Instance.OnEndTurnByCharacter -= OnEndTurn;
-        CombatManager.Instance.OnEndCombatByCharacter -= OnEndCombat;
+        CombatManager.Instance.OnPlayerVictory -= OnPlayerVictory;
     }
     #endregion
 
     protected virtual void Initialize()
     {
-        //_characterSpriteRenderer.material.mainTexture = _data.SpriteSheet;
-        //_characterSpriteRenderer.sprite = _data.SpriteSheet.
-
+        SubscribeCombatEventsExceptOnStartCombat();
         _combatState = Waiting;
-        /* temp comment -----------
-
-        _state = Attacking;
-        ------------------------- */
     }
 
 
@@ -320,11 +312,8 @@ public class Character : Role, ICharacter
     }
 
     
-    public void ChangeCombatState(CombatStates desiredState)
+    public virtual void ChangeCombatState(CombatStates desiredState)
     {
-        if (!_isInCombat)
-            return;
-
         switch (desiredState)
         {
             case CombatStates.Waiting:
@@ -357,7 +346,7 @@ public class Character : Role, ICharacter
     }
     #endregion
 
-    #region overrides
+    #region Overrides
     public override string ToString()
     {
         return $"{_data.name}, Role: {_role}, Lvl: {_data.CurrentLevel}";

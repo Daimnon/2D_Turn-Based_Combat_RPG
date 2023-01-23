@@ -19,8 +19,5 @@ public class SceneManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(combatScene);
     }
 
-    public void OnCombatStart()
-    {
-        CombatManager.Instance.Initialize(0);
-    }
+
 }

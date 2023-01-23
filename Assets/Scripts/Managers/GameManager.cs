@@ -21,7 +21,23 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
         _playerCharacter = _playerPrefab.GetComponent<Player>();
+        CombatManager.Instance.OnStartCombat += OnStartCombat;
+        CombatManager.Instance.OnEndCombat += OnEndCombat;
 
         DontDestroyOnLoad(this);
+    }
+    private void OnDestroy()
+    {
+        CombatManager.Instance.OnStartCombat -= OnStartCombat;
+        CombatManager.Instance.OnEndCombat -= OnEndCombat;
+    }
+
+    public void OnStartCombat()
+    {
+        //CombatManager.Instance.Initialize(0);
+    }
+    public void OnEndCombat()
+    {
+        //CombatManager.Instance.Initialize(0);
     }
 }

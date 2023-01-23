@@ -10,6 +10,10 @@ public class Skill : MonoBehaviour, ISkill
     private Character _invokerC;
     public Character InvokerC { get => _invokerC; set => _ = value; }
 
+    private void Awake()
+    {
+        _invokerC = GetComponent<Character>();
+    }
     public virtual void Activate()
     {
         Debug.Log($"{_invokerC.Data.Name} Activated {_name}");
