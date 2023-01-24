@@ -7,32 +7,35 @@ public class PartyManager : MonoBehaviour
     private static PartyManager _instance;
     public static PartyManager Instance => _instance;
 
-    private List<Character> _playerParty, _enemyParty, _potentialAllies;
+    private List<Character> _playerParty;
+    private List<Enemy> _enemyParty;
+    private List<Ally> _potentialAllies;
     private Ally[] _chosenAllies;
 
     public List<Character> PlayerParty { get => _playerParty; set => _playerParty = value; }
-    public List<Character> EnemyParty { get => _enemyParty; set => _enemyParty = value; }
+    public List<Enemy> EnemyParty { get => _enemyParty; set => _enemyParty = value; }
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
-        CombatManager.Instance.OnStartCombat += OnStartCombat;
-        CombatManager.Instance.OnEndCombat += OnEndCombat;
     }
     private void OnDestroy()
     {
-        CombatManager.Instance.OnStartCombat -= OnStartCombat;
-        CombatManager.Instance.OnEndCombat -= OnEndCombat;
+        GameManager.Instance.OnStartGame -= OnStartCombat;
+        GameManager.Instance.OnStartCombat -= OnStartCombat;
+        GameManager.Instance.OnEndCombat -= OnEndCombat;
     }
     public void Initialize()
     {
         _instance = this;
         _playerParty = new List<Character>(3) { GameManager.Instance.PlayerCharacter, null, null };
-        _enemyParty = new List<Character>(3) { null, null, null };
-        _potentialAllies = new List<Character>();
+        _enemyParty = new List<Enemy>(3) { null, null, null };
+        _potentialAllies = new List<Ally>();
         _chosenAllies = new Ally[2];
+        GameManager.Instance.OnStartCombat += OnStartCombat;
+        GameManager.Instance.OnEndCombat += OnEndCombat;
     }
-    public void AddNewAlly(Character newAlly)
+    public void AddNewAlly(Ally newAlly)
     {
         _potentialAllies.Add(newAlly);
     }
@@ -51,7 +54,7 @@ public class PartyManager : MonoBehaviour
     }
     public void OnStartCombat()
     {
-
+        //
     }
     public void OnEndCombat()
     {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,27 +18,51 @@ public class GameManager : MonoBehaviour
 
     public Player PlayerCharacter => _playerCharacter;
 
+    public event Action OnStartGame, OnStartCombat, OnEndCombat;
+
     private void Awake()
     {
         _instance = this;
-        _playerCharacter = _playerPrefab.GetComponent<Player>();
-        CombatManager.Instance.OnStartCombat += OnStartCombat;
-        CombatManager.Instance.OnEndCombat += OnEndCombat;
-
+        
         DontDestroyOnLoad(this);
     }
-    private void OnDestroy()
-    {
-        CombatManager.Instance.OnStartCombat -= OnStartCombat;
-        CombatManager.Instance.OnEndCombat -= OnEndCombat;
-    }
 
-    public void OnStartCombat()
+    public void InvokeStartGame() // occurs when entering combat.
     {
-        //CombatManager.Instance.Initialize(0);
+        if (OnStartGame != null)
+        {
+            OnStartGame.Invoke();
+        }
     }
-    public void OnEndCombat()
+    public void InvokeStartCombat() // occurs when entering combat.
     {
-        //CombatManager.Instance.Initialize(0);
+        if (OnStartCombat != null)
+        {
+            SceneManager.Instance.LoadCombatScene(1);
+            StartCoroutine(InvokeStartCombatDelay());
+        }
+    }
+    public void InvokeEndCombat() // occurs if player survived the combat and all enemies are dealt with.
+    {
+        if (OnEndCombat != null)
+        {
+            SceneManager.Instance.LoadCombatScene(0);
+            StartCoroutine(InvokeEndCombatDelay());
+        }
+    }
+    private IEnumerator InvokeStartCombatDelay()
+    {
+        OnStartCombat.Invoke();
+
+        yield return null;
+        _playerCharacter = _playerPrefab.GetComponent<Player>();
+        Debug.Log($"Combat started");
+    }
+    private IEnumerator InvokeEndCombatDelay()
+    {
+        OnEndCombat.Invoke();
+
+        yield return null;
+        Debug.Log($"Combat concluded");
     }
 }

@@ -22,22 +22,19 @@ public class CombatManager : MonoBehaviour
     public List<Enemy> EnemyParty { get => _enemyParty; set => _enemyParty = value; }
     public List<Character> CombatParticipantsSortedByTurn { get => _combatParticipantsSortedByTurn; set => _combatParticipantsSortedByTurn = value; }
 
-    public event Action OnStartCombat, OnEndCombat;
+    
     public event Action<Character> OnStartTurnByCharacter, OnAttackByCharacter, OnAttackHitByCharacter, OnAttackMissByCharacter, OnAttackHitCritByCharacter, OnAttackKillOpponent, OnAttackResolveByOpponent, OnDeathByCharacter, OnEndTurnByCharacter, OnPlayerVictory;
 
     private int _maxPartyMembers = 3;
 
     private void Awake()
     {
-        _instance = this;
-        _playerParty = new List<Character>(3) { null, null, null };
-        _enemyParty = new List<Enemy>(3) { null, null, null };
-        DontDestroyOnLoad(this);
+        Initialize();
     }
 
     private void OnEnable()
     {
-        Initialize();
+        GameManager.Instance.InvokeStartCombat();
     }
     private void OnDisable()
     {
@@ -49,8 +46,21 @@ public class CombatManager : MonoBehaviour
         // set new player party by player + allys amount & populate it
         // set new enemy party by num of currently faced enemies & populate it
     }
+    private void OnDestroy()
+    {
+        GameManager.Instance.OnStartCombat -= SpawnCharacters;
+        GameManager.Instance.OnEndCombat -= SpawnCharacters;
+    }
 
     private void Initialize()
+    {
+        _instance = this;
+        _playerParty = PartyManager.Instance.PlayerParty;
+        _enemyParty = PartyManager.Instance.EnemyParty;
+        GameManager.Instance.OnStartCombat += SpawnCharacters;
+        GameManager.Instance.OnEndCombat += SpawnCharacters;
+    }
+    private void SpawnCharacters()
     {
         //move later
         //PartyManager.Instance.Initialize();
@@ -87,17 +97,14 @@ public class CombatManager : MonoBehaviour
             }
         }
     }
-
+    private void EndCombat()
+    {
+        GameManager.Instance.InvokeEndCombat();
+        Destroy(gameObject);
+    }
 
     #region Events
-    public void InvokeStartCombat() // occurs when entering combat.
-    {
-        if (OnStartCombat != null)
-        {
-            OnStartCombat.Invoke();
-            Debug.Log($"Combat started");
-        }
-    }
+    
     public void InvokeStartTurnByCharacter(Character invokerC) // occurs when this character's turn has started.
     {
         if (OnStartTurnByCharacter != null)
@@ -179,14 +186,7 @@ public class CombatManager : MonoBehaviour
             Debug.Log($"Combat ended, player won!");
         }
     }
-    public void InvokeEndCombat() // occurs if player survived the combat and all enemies are dealt with.
-    {
-        if (OnEndCombat != null)
-        {
-            OnEndCombat.Invoke();
-            Debug.Log($"Combat concluded");
-        }
-    }
+    
     #endregion
 
     // if not using return can be simplified
