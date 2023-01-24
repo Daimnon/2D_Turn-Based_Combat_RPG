@@ -11,19 +11,20 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance => _instance;
 
     [SerializeField] private GameObject _playerPrefab;
+
     private Player _playerCharacter;
+    public Player PlayerCharacter => _playerCharacter;
 
     [SerializeField] private GameState _gameState;
     public GameState GameState { get => _gameState; set => _gameState = value; }
 
-    public Player PlayerCharacter => _playerCharacter;
 
     public event Action OnStartGame, OnStartCombat, OnEndCombat;
 
     private void Awake()
     {
         _instance = this;
-        
+        _playerCharacter = _playerPrefab.GetComponent<Player>();
         DontDestroyOnLoad(this);
     }
 
@@ -50,19 +51,25 @@ public class GameManager : MonoBehaviour
             StartCoroutine(InvokeEndCombatDelay());
         }
     }
+    private IEnumerator InvokeInvokeStartGameDelay()
+    {
+        yield return null;
+
+        OnStartGame.Invoke();
+        Debug.Log($"Combat started");
+    }
     private IEnumerator InvokeStartCombatDelay()
     {
-        OnStartCombat.Invoke();
-
         yield return null;
-        _playerCharacter = _playerPrefab.GetComponent<Player>();
+
+        OnStartCombat.Invoke();
         Debug.Log($"Combat started");
     }
     private IEnumerator InvokeEndCombatDelay()
     {
-        OnEndCombat.Invoke();
-
         yield return null;
+
+        OnEndCombat.Invoke();
         Debug.Log($"Combat concluded");
     }
 }

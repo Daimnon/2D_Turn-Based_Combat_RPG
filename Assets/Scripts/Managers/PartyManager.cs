@@ -17,17 +17,21 @@ public class PartyManager : MonoBehaviour
 
     private void Awake()
     {
+        _instance = this;
+        
         DontDestroyOnLoad(this);
+    }
+    private void Start()
+    {
+        Initialize();
     }
     private void OnDestroy()
     {
         GameManager.Instance.OnStartGame -= OnStartCombat;
-        GameManager.Instance.OnStartCombat -= OnStartCombat;
         GameManager.Instance.OnEndCombat -= OnEndCombat;
     }
     public void Initialize()
     {
-        _instance = this;
         _playerParty = new List<Character>(3) { GameManager.Instance.PlayerCharacter, null, null };
         _enemyParty = new List<Enemy>(3) { null, null, null };
         _potentialAllies = new List<Ally>();
@@ -54,7 +58,7 @@ public class PartyManager : MonoBehaviour
     }
     public void OnStartCombat()
     {
-        //
+       // _playerParty.Add(GameManager.Instance.PlayerCharacter);
     }
     public void OnEndCombat()
     {
