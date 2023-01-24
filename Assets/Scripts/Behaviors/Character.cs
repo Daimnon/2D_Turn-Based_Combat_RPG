@@ -12,7 +12,7 @@ public class Character : Role, ICharacter
     protected CombatState _combatState;
 
     [SerializeField] protected CharacterData _data;
-    public CharacterData Data { get => _data; set => _ = value; }
+    public CharacterData Data { get => _data; set => _data = value; }
 
     [SerializeField] protected float _originalPosX;
     public float OriginalPosX => _originalPosX;
@@ -33,10 +33,10 @@ public class Character : Role, ICharacter
 
     protected int _skillSlotToActivateNum;
 
-    public bool MyTurn { get => _isMyTurn; set => _ = value; }
-    public bool IsAttackMelee { get => _isAttackMelee; set => _ = value; }
-    public bool IsAlive { get => _isAlive; set => _ = value; }
-    public int SkillSlotToActivateNum { get => _skillSlotToActivateNum; set => _ = value; }
+    public bool MyTurn { get => _isMyTurn; set => _isMyTurn = value; }
+    public bool IsAttackMelee { get => _isAttackMelee; set => _isAttackMelee = value; }
+    public bool IsAlive { get => _isAlive; set => _isAlive = value; }
+    public int SkillSlotToActivateNum { get => _skillSlotToActivateNum; set => _skillSlotToActivateNum = value; }
 
     protected bool _isSubscribedToCombatEvents, _isUnsubscribedFromCombatEvents;
 

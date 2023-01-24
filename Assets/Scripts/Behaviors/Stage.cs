@@ -5,10 +5,10 @@ using UnityEngine;
 public class Stage : MonoBehaviour
 {
     [SerializeField] protected List<EnemyData> _enemyWarriorDataFiles, _enemyDefenderDataFiles, _enemyEnchanterDataFiles, _enemyRogueDataFiles;
-    public List<EnemyData> EnemyWarriorDataFiles { get => _enemyWarriorDataFiles; set => _ = value; }
-    public List<EnemyData> EnemyDefenderDataFiles { get => _enemyDefenderDataFiles; set => _ = value; }
-    public List<EnemyData> EnemyEnchanterDataFiles { get => _enemyEnchanterDataFiles; set => _ = value; }
-    public List<EnemyData> EnemyRogueDataFiles { get => _enemyRogueDataFiles; set => _ = value; }
+    public List<EnemyData> EnemyWarriorDataFiles { get => _enemyWarriorDataFiles; set => _enemyWarriorDataFiles = value; }
+    public List<EnemyData> EnemyDefenderDataFiles { get => _enemyDefenderDataFiles; set => _enemyDefenderDataFiles = value; }
+    public List<EnemyData> EnemyEnchanterDataFiles { get => _enemyEnchanterDataFiles; set => _enemyEnchanterDataFiles = value; }
+    public List<EnemyData> EnemyRogueDataFiles { get => _enemyRogueDataFiles; set => _enemyRogueDataFiles = value; }
 
     private EnemyWarriorCreator enemyWarriorCreator;
     private EnemyDefenderCreator enemyDefenderCreator;

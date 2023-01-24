@@ -183,7 +183,6 @@ MonoBehaviour:
   _originalPosX: 5
   _attackerPosTr: {fileID: 747285576}
   _slideSpeed: 100
-  _isInCombat: 1
   _isMyTurn: 0
   _isAttackMelee: 1
   _didWeaponMadeContactWithOpponent: 0
@@ -559,6 +558,10 @@ PrefabInstance:
     - target: {fileID: -8653719598885068355, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_Name
       value: Graphics Parent
+      objectReference: {fileID: 0}
+    - target: {fileID: -8653719598885068355, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
+      propertyPath: m_TagString
+      value: Ally
       objectReference: {fileID: 0}
     - target: {fileID: -7552582706839291426, guid: f51e3889b0f512c45878a4ca21919b18, type: 3}
       propertyPath: m_RootOrder

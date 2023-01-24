@@ -232,10 +232,9 @@ public class Player : Character, IPlayer
         Ray ray = _camera.ScreenPointToRay(_cursorPos);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-        if (hit.collider && hit.transform.root.TryGetComponent(out Character targetCharacter))
+        if (hit.collider && (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Ally") || hit.collider.CompareTag("Player")))
         {
-
-            _lastCharacterClickedOn = targetCharacter;
+            _lastCharacterClickedOn = hit.transform.root.GetComponent<Character>();
 
             if (_isMyTurn && _combatState == Attacking)
                 OpenSkillMenu();
@@ -246,6 +245,7 @@ public class Player : Character, IPlayer
         else
         {
             _lastCharacterClickedOn = null;
+            CloseSkillMenu();
         }
         // -------------------------------------------------------------------------------------
 
@@ -270,6 +270,14 @@ public class Player : Character, IPlayer
                 CombatUIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(true);
                 break;
         }
+    }
+    public void CloseSkillMenu()
+    {
+        if (!CombatUIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
+            return;
+
+        CombatUIManager.Instance.CombatSkillMenu.gameObject.SetActive(false);
+        CombatUIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(false);
     }
     #endregion
 

@@ -8,8 +8,8 @@ public enum Roles { Warrior, Defender, Enchanter, Rogue }
 public class Role : MonoBehaviour
 {
     [SerializeField] protected CharacterType _characterType;
-    public CharacterType DefinedCharacterType { get => _characterType; set => _ = value; }
+    public CharacterType DefinedCharacterType { get => _characterType; set => _characterType = value; }
 
     [SerializeField] protected Roles _role;
-    public Roles DefinedRole { get => _role; set => _ = value; }
+    public Roles DefinedRole { get => _role; set => _role = value; }
 }

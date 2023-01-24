@@ -19,7 +19,7 @@ public class CombatUIManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-    public void RefreshCombatSkillMenuDisplay(Character invokingC, Character lastCharacterClickedOn, Vector2 newPosUI, Skill[] activeSkills, int lvl)
+    public void RefreshCombatSkillMenuDisplay(Player invokingP, Character lastCharacterClickedOn, Vector2 newPosUI, Skill[] activeSkills, int lvl)
     {
         _combatSkillMenu.transform.position = newPosUI;
 
@@ -31,10 +31,10 @@ public class CombatUIManager : MonoBehaviour
                 continue;
             }
 
-            activeSkills[i].InvokerC = invokingC;
-            invokingC.SkillSlotToActivateNum = i;
+            //activeSkills[i].InvokerC = invokingP;
+            invokingP.SkillSlotToActivateNum = i;
             _combatSkillMenu.Skills[i].onClick.RemoveAllListeners();
-            _combatSkillMenu.Skills[i].onClick.AddListener(invokingC.ActivateSkill);
+            _combatSkillMenu.Skills[i].onClick.AddListener(invokingP.ActivateSkill);
             Debug.Log($"Populated {_combatSkillMenu.Skills[i].name} successfuly");
         }
 

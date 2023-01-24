@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private Player _playerCharacter;
 
     [SerializeField] private GameState _gameState;
-    public GameState GameState { get => _gameState; set => _ = value; }
+    public GameState GameState { get => _gameState; set => _gameState = value; }
 
     public Player PlayerCharacter => _playerCharacter;
 

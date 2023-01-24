@@ -5,5 +5,5 @@ using UnityEngine;
 public class Ally : Character, ICharacter, IAlly
 {
     private int _partyIndex = 0;
-    public int PartyIndex { get => _partyIndex; set => _ = value; }
+    public int PartyIndex { get => _partyIndex; set => _partyIndex = value; }
 }

@@ -5,5 +5,5 @@ using UnityEngine;
 public class SkillSlot : MonoBehaviour
 {
     [SerializeField] private int _slotNum;
-    public int SlotNum { get => _slotNum; set => _ = value; }
+    public int SlotNum { get => _slotNum; set => _slotNum = value; }
 }

@@ -25,25 +25,25 @@ public class CharacterData : ScriptableObject
     #endregion
 
     #region properties
-    public string Name { get => _name; set => _ = value; }
-    public int CurrentLevel { get => _currentLevel; set => _ = value; }
-    public int MaxHealth { get => _maxHealth; set => _ = value; }
-    public int CurrentHealth { get => _currentHealth; set => _ = value; }
-    public int MaxMana { get => _maxMana; set => _ = value; }
-    public int CurrentMana { get => _currentMana; set => _ = value; }
-    public int Vigor { get => _vigor; set => _ = value; }
-    public int Strength { get => _strength; set => _ = value; }
-    public int Intelligence { get => _intelligence; set => _ = value; }
-    public int Speed { get => _speed; set => _ = value; }
+    public string Name { get => _name; set => _name = value; }
+    public int CurrentLevel { get => _currentLevel; set => _currentLevel = value; }
+    public int MaxHealth { get => _maxHealth; set => _maxHealth = value; }
+    public int CurrentHealth { get => _currentHealth; set => _currentHealth = value; }
+    public int MaxMana { get => _maxMana; set => _maxMana = value; }
+    public int CurrentMana { get => _currentMana; set => _currentMana = value; }
+    public int Vigor { get => _vigor; set => _vigor = value; }
+    public int Strength { get => _strength; set => _strength = value; }
+    public int Intelligence { get => _intelligence; set => _intelligence = value; }
+    public int Speed { get => _speed; set => _speed = value; }
     //public Texture2D SpriteSheet => _spriteSheet;
-    public Weapon PrimaryOneHanded { get => _primaryOneHanded; set => _ = value; }
-    public Weapon SecondaryOneHanded { get => _secondaryOneHanded; set => _ = value; }
-    public Weapon TwoHanded { get => _twoHanded; set => _ = value; }
-    public HeadGear @HeadGear { get => _headGear; set => _ = value; }
-    public TopGear @TopGear { get => _topGear; set => _ = value; }
-    public BottomGear @BottomGear { get => _bottomGear; set => _ = value; }
-    public HandsGear @HandsGear { get => _handsGear; set => _ = value; }
-    public FeetGear @FeetGear { get => _feetGear; set => _ = value; }
-    public Skill[] ActiveSkills { get => _activeSkills; set => _ = value; }
+    public Weapon PrimaryOneHanded { get => _primaryOneHanded; set => _primaryOneHanded = value; }
+    public Weapon SecondaryOneHanded { get => _secondaryOneHanded; set => _secondaryOneHanded = value; }
+    public Weapon TwoHanded { get => _twoHanded; set => _twoHanded = value; }
+    public HeadGear @HeadGear { get => _headGear; set => _headGear = value; }
+    public TopGear @TopGear { get => _topGear; set => _topGear = value; }
+    public BottomGear @BottomGear { get => _bottomGear; set => _bottomGear = value; }
+    public HandsGear @HandsGear { get => _handsGear; set => _handsGear = value; }
+    public FeetGear @FeetGear { get => _feetGear; set => _feetGear = value; }
+    public Skill[] ActiveSkills { get => _activeSkills; set => _activeSkills = value; }
     #endregion
 }

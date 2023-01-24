@@ -16,15 +16,14 @@ public class CombatManager : MonoBehaviour
 
     [SerializeField] private List<Character> _playerParty, _combatParticipantsSortedByTurn;
     [SerializeField] private List<Enemy> _enemyParty;
-    [SerializeField] private Transform[] _playerTr;
-    [SerializeField] private Transform[] _enemiesTr;
+    [SerializeField] private Transform[] _playerTr, _enemiesTr;
 
-    public List<Character> PlayerParty { get => _playerParty; set => _ = value; }
-    public List<Enemy> EnemyParty { get => _enemyParty; set => _ = value; }
-    public List<Character> CombatParticipantsSortedByTurn { get => _combatParticipantsSortedByTurn; set => _ = value; }
+    public List<Character> PlayerParty { get => _playerParty; set => _playerParty = value; }
+    public List<Enemy> EnemyParty { get => _enemyParty; set => _enemyParty = value; }
+    public List<Character> CombatParticipantsSortedByTurn { get => _combatParticipantsSortedByTurn; set => _combatParticipantsSortedByTurn = value; }
 
     public event Action OnStartCombat, OnEndCombat;
-    public event Action<Character> OnStartCombatByCharacter, OnStartTurnByCharacter, OnAttackByCharacter, OnAttackHitByCharacter, OnAttackMissByCharacter, OnAttackHitCritByCharacter, OnAttackKillOpponent, OnAttackResolveByOpponent, OnDeathByCharacter, OnEndTurnByCharacter, OnPlayerVictory;
+    public event Action<Character> OnStartTurnByCharacter, OnAttackByCharacter, OnAttackHitByCharacter, OnAttackMissByCharacter, OnAttackHitCritByCharacter, OnAttackKillOpponent, OnAttackResolveByOpponent, OnDeathByCharacter, OnEndTurnByCharacter, OnPlayerVictory;
 
     private int _maxPartyMembers = 3;
 

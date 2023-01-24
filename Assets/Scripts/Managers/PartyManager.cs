@@ -10,8 +10,8 @@ public class PartyManager : MonoBehaviour
     private List<Character> _playerParty, _enemyParty, _potentialAllies;
     private Ally[] _chosenAllies;
 
-    public List<Character> PlayerParty { get => _playerParty; set => _ = value; }
-    public List<Character> EnemyParty { get => _enemyParty; set => _ = value; }
+    public List<Character> PlayerParty { get => _playerParty; set => _playerParty = value; }
+    public List<Character> EnemyParty { get => _enemyParty; set => _enemyParty = value; }
 
     private void Awake()
     {
