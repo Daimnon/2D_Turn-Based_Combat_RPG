@@ -31,8 +31,9 @@ public class CombatUIManager : MonoBehaviour
                 continue;
             }
 
+            _combatSkillMenu.Skills[i].interactable = true;
+
             //activeSkills[i].InvokerC = invokingP;
-            invokingP.SkillSlotToActivateNum = i;
             _combatSkillMenu.Skills[i].onClick.RemoveAllListeners();
             _combatSkillMenu.Skills[i].onClick.AddListener(invokingP.ActivateSkill);
             Debug.Log($"Populated {_combatSkillMenu.Skills[i].name} successfuly");

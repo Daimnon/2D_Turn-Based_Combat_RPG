@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.U2D.Animation;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class Player : Character, IPlayer
 {
+    private EventSystem _eventSystem;
     private PlayerControls _playerControls;
     private InputAction _interact;
 
@@ -16,7 +18,8 @@ public class Player : Character, IPlayer
     private Camera _camera;
     private Mouse _cursor;
     private Vector2 _cursorPos;
-
+    private const string _playerTag = "Player", _allyTag = "Ally", _enemyTag = "Enemy", _skillSlotTag = "SkillSlot";
+    #region Monobehaviour Callbacks
     private void Awake()
     {
         _data = _data as PlayerData;
@@ -35,6 +38,7 @@ public class Player : Character, IPlayer
     {
         _interact.Disable();
     }
+    #endregion
 
     #region Combat States
     protected override void Waiting() // while waiting for this character's turn
@@ -232,7 +236,7 @@ public class Player : Character, IPlayer
         Ray ray = _camera.ScreenPointToRay(_cursorPos);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-        if (hit.collider && (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Ally") || hit.collider.CompareTag("Player")))
+        if (hit.collider && (hit.collider.CompareTag(_enemyTag) || hit.collider.CompareTag(_allyTag) || hit.collider.CompareTag(_playerTag)))
         {
             _lastCharacterClickedOn = hit.transform.root.GetComponent<Character>();
 
@@ -245,7 +249,7 @@ public class Player : Character, IPlayer
         else
         {
             _lastCharacterClickedOn = null;
-            CloseSkillMenu();
+            StartCoroutine(CloseSkillMenu());
         }
         // -------------------------------------------------------------------------------------
 
@@ -271,27 +275,29 @@ public class Player : Character, IPlayer
                 break;
         }
     }
-    public void CloseSkillMenu()
-    {
-        if (!CombatUIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
-            return;
-
-        CombatUIManager.Instance.CombatSkillMenu.gameObject.SetActive(false);
-        CombatUIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(false);
-    }
     #endregion
 
     #region ICharacter
     public override void ActivateSkill()
     {
-        _data.ActiveSkills[SkillSlotToActivateNum].Activate();
-        //(_data as CharacterData).ActiveSkills[SkillSlotToActivateNum].Activate();
+        _data.ActiveSkills[EventSystem.current.currentSelectedGameObject.GetComponent<SkillSlot>().SlotNum].Activate();
     }
     public override void Die()
     {
 
     }
     #endregion
+
+    public IEnumerator CloseSkillMenu()
+    {
+        if (!CombatUIManager.Instance.CombatSkillMenu.gameObject.activeInHierarchy)
+            StopCoroutine(CloseSkillMenu());
+
+        yield return null;
+
+        CombatUIManager.Instance.CombatSkillMenu.gameObject.SetActive(false);
+        CombatUIManager.Instance.CombatSkillMenu.SkillsParent.SetActive(false);
+    }
 
     #region overrides
     public override string ToString()

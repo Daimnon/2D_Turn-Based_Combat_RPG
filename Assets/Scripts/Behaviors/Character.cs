@@ -31,12 +31,9 @@ public class Character : Role, ICharacter
     protected bool _isMyTurn = false;
     [SerializeField] protected bool _isAttackMelee = true, _didWeaponMadeContactWithOpponent = false, _isAlive = true;
 
-    protected int _skillSlotToActivateNum;
-
     public bool MyTurn { get => _isMyTurn; set => _isMyTurn = value; }
     public bool IsAttackMelee { get => _isAttackMelee; set => _isAttackMelee = value; }
     public bool IsAlive { get => _isAlive; set => _isAlive = value; }
-    public int SkillSlotToActivateNum { get => _skillSlotToActivateNum; set => _skillSlotToActivateNum = value; }
 
     protected bool _isSubscribedToCombatEvents, _isUnsubscribedFromCombatEvents;
 
@@ -338,7 +335,8 @@ public class Character : Role, ICharacter
     #region ICharacter
     public virtual void ActivateSkill()
     {
-        _data.ActiveSkills[SkillSlotToActivateNum].Activate();
+        // implement ai logic
+        _data.ActiveSkills[0].Activate();
     }
     public virtual void Die()
     {
