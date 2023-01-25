@@ -27,8 +27,8 @@ public class PartyManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        GameManager.Instance.OnStartGame -= OnStartCombat;
-        GameManager.Instance.OnEndCombat -= OnEndCombat;
+        GameManager.Instance.OnStartGame -= OnStartGame;
+        GameManager.Instance.OnEndCombat -= OnEndGame;
     }
     public void Initialize()
     {
@@ -36,8 +36,8 @@ public class PartyManager : MonoBehaviour
         _enemyParty = new List<Enemy>(3) { null, null, null };
         _potentialAllies = new List<Ally>();
         _chosenAllies = new Ally[2];
-        GameManager.Instance.OnStartCombat += OnStartCombat;
-        GameManager.Instance.OnEndCombat += OnEndCombat;
+        GameManager.Instance.OnStartGame += OnStartGame;
+        GameManager.Instance.OnEndCombat += OnEndGame;
     }
     public void AddNewAlly(Ally newAlly)
     {
@@ -55,6 +55,14 @@ public class PartyManager : MonoBehaviour
     public void SetEnemyParty(Stage stage)
     {
 
+    }
+    public void OnStartGame()
+    {
+        Debug.Log($"Party Should Initialize Here");
+    }
+    public void OnEndGame()
+    {
+        Debug.Log($"Party survived combat");
     }
     public void OnStartCombat()
     {
