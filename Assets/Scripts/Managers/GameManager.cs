@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         if (OnStartGame != null)
         {
+            //Invoke(nameof(OnStartGame), 0);
             OnStartGame.Invoke();
         }
     }
@@ -39,16 +40,14 @@ public class GameManager : MonoBehaviour
     {
         if (OnStartCombat != null)
         {
-            SceneManager.Instance.LoadCombatScene(1);
-            StartCoroutine(InvokeStartCombatDelay());
+            OnStartCombat.Invoke();
         }
     }
     public void InvokeEndCombat() // occurs if player survived the combat and all enemies are dealt with.
     {
         if (OnEndCombat != null)
         {
-            SceneManager.Instance.LoadCombatScene(0);
-            StartCoroutine(InvokeEndCombatDelay());
+            OnEndCombat.Invoke();
         }
     }
     private IEnumerator InvokeInvokeStartGameDelay()

@@ -58,7 +58,7 @@ public class PartyManager : MonoBehaviour
     }
     public void OnStartCombat()
     {
-       // _playerParty.Add(GameManager.Instance.PlayerCharacter);
+       
     }
     public void OnEndCombat()
     {

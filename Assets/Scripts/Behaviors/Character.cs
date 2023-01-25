@@ -280,16 +280,15 @@ public class Character : Role, ICharacter
 
     protected virtual void Initialize()
     {
-        SubscribeCombatEventsExceptOnStartCombat();
         _combatState = Waiting;
     }
 
 
-    protected virtual void SlideTowardsOpponentAttackerPos()
+    public virtual void SlideTowardsOpponentAttackerPos()
     {
         //transform.position += _slideSpeed * Time.deltaTime * (Vector3)CombatManager.Instance.GetAttackDirection(this, LastCharacterClickedOn);
     }
-    protected virtual void SlideTowardOriginalPos()
+    public virtual void SlideTowardOriginalPos()
     {
         //transform.position += _slideSpeed * Time.deltaTime * _lastCharacterClickedOn.AttackerPosTr.position - new Vector3(_originalPosX, transform.position.y, transform.position.z);
     }

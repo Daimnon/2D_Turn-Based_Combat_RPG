@@ -12,10 +12,11 @@ public class Skill : MonoBehaviour, ISkill
 
     private void Awake()
     {
-        _invokerC = GetComponent<Character>();
+        //_invokerC = GetComponent<Character>();
     }
     public virtual void Activate()
     {
+        (_invokerC as Player).SlideTowardsOpponentAttackerPos();
         Debug.Log($"{_invokerC.Data.Name} Activated {_name}");
     }
     public override string ToString()

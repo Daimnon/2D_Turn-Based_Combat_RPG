@@ -221,11 +221,11 @@ public class Player : Character, IPlayer
         _combatState = Attacking;
     }
 
-    protected override void SlideTowardsOpponentAttackerPos()
+    public override void SlideTowardsOpponentAttackerPos()
     {
         transform.position += _slideSpeed * Time.deltaTime * (Vector3)CombatManager.Instance.GetAttackDirection(this, LastCharacterClickedOn);
     }
-    protected override void SlideTowardOriginalPos()
+    public override void SlideTowardOriginalPos()
     {
         transform.position += _slideSpeed * Time.deltaTime * _lastCharacterClickedOn.AttackerPosTr.position - new Vector3(_originalPosX, transform.position.y, transform.position.z);
     }
