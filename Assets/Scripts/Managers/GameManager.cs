@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public GameState GameState { get => _gameState; set => _gameState = value; }
 
 
-    public event Action OnStartGame, OnStartCombat, OnEndCombat;
+    public event Action OnStartGame, OnStartCombat, OnEndCombat, OnEndGame;
 
     private void Awake()
     {
@@ -30,45 +30,18 @@ public class GameManager : MonoBehaviour
 
     public void InvokeStartGame() // occurs when entering combat.
     {
-        if (OnStartGame != null)
-        {
-            //Invoke(nameof(OnStartGame), 0);
-            OnStartGame.Invoke();
-        }
+        OnStartGame?.Invoke();
     }
     public void InvokeStartCombat() // occurs when entering combat.
     {
-        if (OnStartCombat != null)
-        {
-            OnStartCombat.Invoke();
-        }
+        OnStartCombat?.Invoke();
     }
     public void InvokeEndCombat() // occurs if player survived the combat and all enemies are dealt with.
     {
-        if (OnEndCombat != null)
-        {
-            OnEndCombat.Invoke();
-        }
+        OnEndCombat?.Invoke();
     }
-    private IEnumerator InvokeInvokeStartGameDelay()
+    public void InvokeEndGame() // occurs when entering combat.
     {
-        yield return null;
-
-        OnStartGame.Invoke();
-        Debug.Log($"Combat started");
-    }
-    private IEnumerator InvokeStartCombatDelay()
-    {
-        yield return null;
-
-        OnStartCombat.Invoke();
-        Debug.Log($"Combat started");
-    }
-    private IEnumerator InvokeEndCombatDelay()
-    {
-        yield return null;
-
-        OnEndCombat.Invoke();
-        Debug.Log($"Combat concluded");
+        OnEndGame?.Invoke();
     }
 }

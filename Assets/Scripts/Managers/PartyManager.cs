@@ -58,10 +58,10 @@ public class PartyManager : MonoBehaviour
     }
     public void OnStartCombat()
     {
-       
+        Debug.Log($"Party Should Initialize Here");
     }
     public void OnEndCombat()
     {
-        
+        Debug.Log($"Party survived combat");
     }
 }

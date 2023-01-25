@@ -31,7 +31,6 @@ public class CombatManager : MonoBehaviour
     {
         Initialize();
     }
-
     private void OnEnable()
     {
         GameManager.Instance.InvokeStartCombat();
@@ -99,7 +98,7 @@ public class CombatManager : MonoBehaviour
     }
     private void EndCombat()
     {
-        GameManager.Instance.InvokeEndCombat();
+        GameManager.Instance.InvokeEndGame();
         Destroy(gameObject);
     }
 
@@ -107,9 +106,10 @@ public class CombatManager : MonoBehaviour
     
     public void InvokeStartTurnByCharacter(Character invokerC) // occurs when this character's turn has started.
     {
+        //OnStartTurnByCharacter?.Invoke(invokerC);
         if (OnStartTurnByCharacter != null)
         {
-            OnStartTurnByCharacter.Invoke(invokerC);
+            OnStartTurnByCharacter(invokerC);
             Debug.Log($"Its {invokerC.Data.Name}'s turn");
         }
     }
@@ -117,7 +117,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnAttackByCharacter != null)
         {
-            OnAttackByCharacter.Invoke(invokerC);
+            OnAttackByCharacter(invokerC);
             Debug.Log($"{invokerC.Data.Name} attacked!");
         }
     }
@@ -125,7 +125,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnAttackHitByCharacter != null)
         {
-            OnAttackHitByCharacter.Invoke(invokerC);
+            OnAttackHitByCharacter(invokerC);
             Debug.Log($"{invokerC.Data.Name} hit!");
         }
     }
@@ -133,7 +133,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnAttackMissByCharacter != null)
         {
-            OnAttackMissByCharacter.Invoke(invokerC);
+            OnAttackMissByCharacter(invokerC);
             Debug.Log($"{invokerC.Data.Name} missed!");
         }
     }
@@ -141,7 +141,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnAttackHitCritByCharacter != null)
         {
-            OnAttackHitCritByCharacter.Invoke(invokerC);
+            OnAttackHitCritByCharacter(invokerC);
             Debug.Log($"{invokerC.Data.Name} hit critical!");
         }
     }
@@ -149,7 +149,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnAttackKillOpponent != null)
         {
-            OnAttackKillOpponent.Invoke(invokerC);
+            OnAttackKillOpponent(invokerC);
             Debug.Log($"{invokerC.Data.Name} killed an opponent!");
         }
     }
@@ -157,7 +157,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnAttackResolveByOpponent != null)
         {
-            OnAttackResolveByOpponent.Invoke(invokerC);
+            OnAttackResolveByOpponent(invokerC);
             Debug.Log($"{invokerC.Data.Name} resolved apllied interaction");
         }
     }
@@ -165,7 +165,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnDeathByCharacter != null)
         {
-            OnDeathByCharacter.Invoke(invokerC);
+            OnDeathByCharacter(invokerC);
             Debug.Log($"{invokerC.Data.Name} has died");
         }
     }
@@ -173,7 +173,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnEndTurnByCharacter != null)
         {
-            OnEndTurnByCharacter.Invoke(invokerC);
+            OnEndTurnByCharacter(invokerC);
             Debug.Log($"{invokerC.Data.Name} turn's ended");
         }
     }
@@ -182,7 +182,7 @@ public class CombatManager : MonoBehaviour
     {
         if (OnPlayerVictory != null)
         {
-            OnPlayerVictory.Invoke(invokerC);
+            OnPlayerVictory(invokerC);
             Debug.Log($"Combat ended, player won!");
         }
     }
