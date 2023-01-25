@@ -248,7 +248,7 @@ public class Player : Character, IPlayer
         }
         else
         {
-            _lastCharacterClickedOn = null;
+            //_lastCharacterClickedOn = null;
             StartCoroutine(CloseSkillMenu());
         }
         // -------------------------------------------------------------------------------------

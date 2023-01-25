@@ -31,7 +31,7 @@ public class Character : Role, ICharacter
     protected bool _isMyTurn = false;
     [SerializeField] protected bool _isAttackMelee = true, _didWeaponMadeContactWithOpponent = false, _isAlive = true;
 
-    public bool MyTurn { get => _isMyTurn; set => _isMyTurn = value; }
+    public bool IsMyTurn { get => _isMyTurn; set => _isMyTurn = value; }
     public bool IsAttackMelee { get => _isAttackMelee; set => _isAttackMelee = value; }
     public bool IsAlive { get => _isAlive; set => _isAlive = value; }
 
@@ -183,7 +183,8 @@ public class Character : Role, ICharacter
     {   
         if (invokerC == this)
         {
-            ChangeCombatState(CombatStates.Waiting);
+            _isMyTurn = true;
+            ChangeCombatState(CombatStates.Attacking);
         }
     }
     public virtual void OnAttack(Character invokerC) // occurs before the ability strikes. Usually reserved for reaction effects that modify the ability attributes.

@@ -17,16 +17,16 @@ public class SceneManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        GameManager.Instance.OnStartCombat += LoadCombatScene;
-        GameManager.Instance.OnEndCombat += LoadCombatScene;
-    }
-    private void OnDestroy()
-    {
-        GameManager.Instance.OnStartCombat -= LoadCombatScene;
-        GameManager.Instance.OnEndCombat -= LoadCombatScene;
-    }
+    //private void Start()
+    //{
+    //    GameManager.Instance.OnStartCombat += LoadCombatScene;
+    //    GameManager.Instance.OnEndCombat += LoadCombatScene;
+    //}
+    //private void OnDestroy()
+    //{
+    //    GameManager.Instance.OnStartCombat -= LoadCombatScene;
+    //    GameManager.Instance.OnEndCombat -= LoadCombatScene;
+    //}
 
     public void LoadTown()
     {
@@ -35,5 +35,6 @@ public class SceneManager : MonoBehaviour
     public void LoadCombatScene()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(_trainingSceneNum);
+        GameManager.Instance.InvokeStartCombat();
     }
 }

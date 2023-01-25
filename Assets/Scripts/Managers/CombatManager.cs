@@ -61,49 +61,46 @@ public class CombatManager : MonoBehaviour
     }
     private void SpawnCharacters()
     {
-        //move later
-        //PartyManager.Instance.Initialize();
-
-        // set new player party by player + allys amount & populate it
-        for (int i = 0; i < _playerParty.Count; i++)
+        for (int i = 0; i < PartyManager.Instance.PlayerParty.Count; i++)
         {
             switch (i)
             {
                 case 0:
-                    _playerParty[i] = Spawn(_playerPrefab.GetComponent<Player>(), _playerPrefab, 0);
+                    _playerParty[i] = Spawn(PartyManager.Instance.PlayerParty[0], PartyManager.Instance.PlayerParty[0].gameObject, 0);
                     break;
                 case 1:
-                    _playerParty[i] = Spawn(_allyPrefab.GetComponent<Ally>(), _allyPrefab, 1);
+                    if (_playerParty[i])
+                        _playerParty[i] = Spawn(PartyManager.Instance.PlayerParty[1], PartyManager.Instance.PlayerParty[1].gameObject, 1);
                     break;
                 case 2:
-                    _playerParty[i] = Spawn(_allyPrefab.GetComponent<Ally>(), _allyPrefab, 2);
+                    if (_playerParty[i])
+                        _playerParty[i] = Spawn(PartyManager.Instance.PlayerParty[2], PartyManager.Instance.PlayerParty[2].gameObject, 2);
                     break;
             }
         }
-        for (int i = 0; i < _enemyParty.Count; i++)
+        for (int i = 0; i < PartyManager.Instance.EnemyParty.Count; i++)
         {
             switch (i)
             {
                 case 0:
-                    _enemyParty[i] = Spawn(_enemyPrefab.GetComponent<Enemy>(), _enemyPrefab, 0);
+                    if (_enemyParty[i])
+                        _enemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[0], PartyManager.Instance.EnemyParty[0].gameObject, 0);
                     break;
                 case 1:
-                    _enemyParty[i] = Spawn(_enemyPrefab.GetComponent<Enemy>(), _enemyPrefab, 1);
+                    if (_enemyParty[i])
+                        _enemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[1], PartyManager.Instance.EnemyParty[1].gameObject, 1);
                     break;
                 case 2:
-                    _enemyParty[i] = Spawn(_enemyPrefab.GetComponent<Enemy>(), _enemyPrefab, 2);
+                    if (_enemyParty[i])
+                        _enemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[2], PartyManager.Instance.EnemyParty[2].gameObject, 2);
                     break;
             }
         }
-    }
-    private void EndCombat()
-    {
-        GameManager.Instance.InvokeEndGame();
-        Destroy(gameObject);
+        SetTurnOrder();
     }
 
-    #region Events
-    
+
+    #region Events 
     public void InvokeStartTurnByCharacter(Character invokerC) // occurs when this character's turn has started.
     {
         //OnStartTurnByCharacter?.Invoke(invokerC);
@@ -247,14 +244,21 @@ public class CombatManager : MonoBehaviour
     {
         List<Character> turnOrder = new();
 
-        foreach (Character c in _playerParty)
-            turnOrder.Add(c);
+        foreach (Character c in PartyManager.Instance.PlayerParty)
+        {
+            if (c)
+                turnOrder.Add(c);
+        }
 
-        foreach (Enemy e in _enemyParty)
-            turnOrder.Add(e);
+        foreach (Enemy e in PartyManager.Instance.EnemyParty)
+        {
+            if (e)
+                turnOrder.Add(e);
+        }
 
         // choose order by speed value
         _combatParticipantsSortedByTurn = turnOrder.OrderBy(o => o.Data.Speed).ToList();
+        InvokeStartTurnByCharacter(_combatParticipantsSortedByTurn[0]);
     }
     public Vector2 GetAttackDirection(Character attackerC, Character recieverC)
     {
@@ -267,5 +271,10 @@ public class CombatManager : MonoBehaviour
     private void BattleConclusion()
     {
         // get rewards
+    }
+    private void EndCombat()
+    {
+        GameManager.Instance.InvokeEndGame();
+        Destroy(gameObject);
     }
 }
