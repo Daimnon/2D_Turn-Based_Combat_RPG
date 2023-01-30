@@ -44,10 +44,16 @@ public class SaveManager : MonoBehaviour
         GameManager.Instance.PlayerCharacter.Data = _saveData.Player;
 
         for (int i = 0; i < _saveData.ChosenAllies.Length -1; i++)
-            PartyManager.Instance.ChosenAllies[i].Data = _saveData.ChosenAllies[i];
+        {
+            if (PartyManager.Instance.ChosenAllies[i])
+                PartyManager.Instance.ChosenAllies[i].Data = _saveData.ChosenAllies[i];
+        }
 
         for (int i = 0; i < _saveData.PotentialAllies.Count; i++)
-            PartyManager.Instance.PotentialAllies[i].Data = _saveData.PotentialAllies[i];
+        {
+            if (PartyManager.Instance.PotentialAllies[i])
+                PartyManager.Instance.PotentialAllies[i].Data = _saveData.PotentialAllies[i];
+        }
     }
 
     public void SaveData()

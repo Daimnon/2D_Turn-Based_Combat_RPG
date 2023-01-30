@@ -31,8 +31,9 @@ public class GameManager : MonoBehaviour
 
     public void InvokeStartGame() // occurs when entering combat.
     {
+        SaveManager.Instance.LoadData();
         OnStartGame?.Invoke();
-        StartCoroutine(LoadInTheNextFrame());
+        //StartCoroutine(LoadInTheNextFrame());
     }
     public void InvokeStartCombat() // occurs when entering combat.
     {

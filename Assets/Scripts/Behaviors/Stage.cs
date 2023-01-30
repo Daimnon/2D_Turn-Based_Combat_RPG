@@ -32,7 +32,7 @@ public class Stage : MonoBehaviour
 
     private void Start()
     {
-        _currentTrainingEnemyList = RandomPremadeEnemyGenerator();
+
     }
 
     public void GoToStoryline()
