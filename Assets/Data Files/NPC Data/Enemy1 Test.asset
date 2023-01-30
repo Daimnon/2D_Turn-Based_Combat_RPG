@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d48620f5b75a3546b36c48f93af7e1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 25a07957f654a9e42b6ab2bf60a56a6c, type: 3}
   m_Name: Enemy1 Test
   m_EditorClassIdentifier: 
   _name: Enemy1 Test
@@ -39,13 +39,3 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _maxExp: 0
-  _currentExp: 0
-  _maxLevel: 0
-  _totalSkillPoints: 0
-  _spentSkillPoints: 0
-  _availableSkillPoints: 0
-  _totalStatPoints: 0
-  _spentStatPoints: 5
-  _availableStatPoints: 0
-  _allAquiredSkills: []

@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance => _instance;
 
     [SerializeField] private SaveManager _saveManager;
-
     [SerializeField] private GameObject _playerPrefab, _allyPlaceholderPrefab, _enemyPlaceholderPrefab;
 
     private Player _playerCharacter;
