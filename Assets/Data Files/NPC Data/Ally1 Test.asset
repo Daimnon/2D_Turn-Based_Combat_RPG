@@ -10,13 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d48620f5b75a3546b36c48f93af7e1d, type: 3}
-  m_Name: Ally Test
+  m_Name: Ally1 Test
   m_EditorClassIdentifier: 
-  _name: Ally Test
-  _maxLevel: 0
+  _name: Ally1 Test
   _currentLevel: 5
-  _maxExp: 0
-  _currentExp: 0
   _maxHealth: 15
   _currentHealth: 15
   _maxMana: 29
@@ -25,12 +22,6 @@ MonoBehaviour:
   _strength: 0
   _intelligence: 12
   _speed: 2
-  _totalSkillPoints: 0
-  _spentSkillPoints: 0
-  _availableSkillPoints: 0
-  _totalStatPoints: 0
-  _spentStatPoints: 10
-  _availableStatPoints: 0
   _headGear: {fileID: 0}
   _topGear: {fileID: 0}
   _bottomGear: {fileID: 0}
@@ -39,7 +30,6 @@ MonoBehaviour:
   _primaryOneHanded: {fileID: 0}
   _secondaryOneHanded: {fileID: 0}
   _twoHanded: {fileID: 0}
-  _allAquiredSkills: []
   _activeSkills:
   - {fileID: 0}
   - {fileID: 0}
@@ -49,3 +39,13 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  _maxExp: 0
+  _currentExp: 0
+  _maxLevel: 0
+  _totalSkillPoints: 0
+  _spentSkillPoints: 0
+  _availableSkillPoints: 0
+  _totalStatPoints: 0
+  _spentStatPoints: 10
+  _availableStatPoints: 0
+  _allAquiredSkills: []

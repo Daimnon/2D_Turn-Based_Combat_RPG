@@ -14,14 +14,10 @@ public class CombatManager : MonoBehaviour
     public GameObject AllyPrefab => _allyPrefab;
     public GameObject EnemyPrefab => _enemyPrefab;
 
-    [SerializeField] private List<Character> _playerParty, _combatParticipantsSortedByTurn;
-    [SerializeField] private List<Enemy> _enemyParty;
-    [SerializeField] private Transform[] _playerTr, _enemiesTr;
-
-    public List<Character> PlayerParty { get => _playerParty; set => _playerParty = value; }
-    public List<Enemy> EnemyParty { get => _enemyParty; set => _enemyParty = value; }
+    [SerializeField] private List<Character>_combatParticipantsSortedByTurn;
     public List<Character> CombatParticipantsSortedByTurn { get => _combatParticipantsSortedByTurn; set => _combatParticipantsSortedByTurn = value; }
-
+    
+    [SerializeField] private Transform[] _playerTr, _enemiesTr;
     
     public event Action<Character> OnStartTurnByCharacter, OnAttackByCharacter, OnAttackHitByCharacter, OnAttackMissByCharacter, OnAttackHitCritByCharacter, OnAttackKillOpponent, OnAttackResolveByOpponent, OnDeathByCharacter, OnEndTurnByCharacter, OnPlayerVictory;
 
@@ -30,15 +26,12 @@ public class CombatManager : MonoBehaviour
     private void Awake()
     {
         Initialize();
-    }
-    private void OnEnable()
-    {
         GameManager.Instance.InvokeStartCombat();
+        SubscribeToEvents();
     }
     private void OnDisable()
     {
-        _playerParty.Clear();
-        _playerParty.Clear();
+        //_enemyParty.Clear();
         _combatParticipantsSortedByTurn.Clear();
 
         Debug.Log($"all combat collections has been reset");
@@ -47,56 +40,50 @@ public class CombatManager : MonoBehaviour
     }
     private void OnDestroy()
     {
-        GameManager.Instance.OnStartCombat -= SpawnCharacters;
-        GameManager.Instance.OnEndCombat -= SpawnCharacters;
+        UnsubscribeFromEvents();
     }
 
     private void Initialize()
     {
         _instance = this;
-        _playerParty = PartyManager.Instance.PlayerParty;
-        _enemyParty = PartyManager.Instance.EnemyParty;
-        GameManager.Instance.OnStartCombat += SpawnCharacters;
-        GameManager.Instance.OnEndCombat += SpawnCharacters;
     }
     private void SpawnCharacters()
     {
-        for (int i = 0; i < PartyManager.Instance.PlayerParty.Count; i++)
+        for (int i = 0; i < PartyManager.Instance.PlayerParty.Length -1; i++)
         {
             switch (i)
             {
                 case 0:
-                    _playerParty[i] = Spawn(PartyManager.Instance.PlayerParty[0], PartyManager.Instance.PlayerParty[0].gameObject, 0);
+                    PartyManager.Instance.PlayerParty[i] = Spawn(PartyManager.Instance.PlayerParty[0], PartyManager.Instance.PlayerParty[0].gameObject, 0);
                     break;
                 case 1:
-                    if (_playerParty[i])
-                        _playerParty[i] = Spawn(PartyManager.Instance.PlayerParty[1], PartyManager.Instance.PlayerParty[1].gameObject, 1);
+                    if (PartyManager.Instance.PlayerParty[i])
+                        PartyManager.Instance.PlayerParty[i] = Spawn(PartyManager.Instance.PlayerParty[1], PartyManager.Instance.PlayerParty[1].gameObject, 1);
                     break;
                 case 2:
-                    if (_playerParty[i])
-                        _playerParty[i] = Spawn(PartyManager.Instance.PlayerParty[2], PartyManager.Instance.PlayerParty[2].gameObject, 2);
+                    if (PartyManager.Instance.PlayerParty[i])
+                        PartyManager.Instance.PlayerParty[i] = Spawn(PartyManager.Instance.PlayerParty[2], PartyManager.Instance.PlayerParty[2].gameObject, 2);
                     break;
             }
         }
-        for (int i = 0; i < PartyManager.Instance.EnemyParty.Count; i++)
+        for (int i = 0; i < PartyManager.Instance.EnemyParty.Length -1; i++)
         {
             switch (i)
             {
                 case 0:
-                    if (_enemyParty[i])
-                        _enemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[0], PartyManager.Instance.EnemyParty[0].gameObject, 0);
+                    if (PartyManager.Instance.EnemyParty[i])
+                        PartyManager.Instance.EnemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[0], PartyManager.Instance.EnemyParty[0].gameObject, 0);
                     break;
                 case 1:
-                    if (_enemyParty[i])
-                        _enemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[1], PartyManager.Instance.EnemyParty[1].gameObject, 1);
+                    if (PartyManager.Instance.EnemyParty[i])
+                        PartyManager.Instance.EnemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[1], PartyManager.Instance.EnemyParty[1].gameObject, 1);
                     break;
                 case 2:
-                    if (_enemyParty[i])
-                        _enemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[2], PartyManager.Instance.EnemyParty[2].gameObject, 2);
+                    if (PartyManager.Instance.EnemyParty[i])
+                        PartyManager.Instance.EnemyParty[i] = Spawn(PartyManager.Instance.EnemyParty[2], PartyManager.Instance.EnemyParty[2].gameObject, 2);
                     break;
             }
         }
-        SetTurnOrder();
     }
 
 
@@ -186,6 +173,15 @@ public class CombatManager : MonoBehaviour
     
     #endregion
 
+    private void SubscribeToEvents()
+    {
+        GameManager.Instance.OnStartCombat += OnStartCombat;
+    }
+    private void UnsubscribeFromEvents()
+    {
+        GameManager.Instance.OnStartCombat -= OnStartCombat;
+    }
+
     // if not using return can be simplified
     private Character Spawn(Character c, GameObject characterPrefab, int partyIndex)
     {
@@ -256,11 +252,9 @@ public class CombatManager : MonoBehaviour
                 turnOrder.Add(e);
         }
 
-        // choose order by speed value
-        _combatParticipantsSortedByTurn = turnOrder.OrderBy(o => o.Data.Speed).ToList();
-        InvokeStartTurnByCharacter(_combatParticipantsSortedByTurn[0]);
+        UpdateTurnOrderBySpeed();
     }
-    public void UpdateTurnOrder()
+    public void UpdateTurnOrderBySpeed()
     {
         _combatParticipantsSortedByTurn.OrderBy(o => o.Data.Speed).ToList();
         InvokeStartTurnByCharacter(_combatParticipantsSortedByTurn[0]);
@@ -273,6 +267,11 @@ public class CombatManager : MonoBehaviour
     {
         return (attackerC.transform.position - recieverC.AttackerPosTr.position).normalized;
     }
+    public void OnStartCombat()
+    {
+        SpawnCharacters();
+        SetTurnOrder();
+    }
     private void BattleConclusion()
     {
         // get rewards
@@ -283,3 +282,8 @@ public class CombatManager : MonoBehaviour
         Destroy(gameObject);
     }
 }
+
+/*
+ * 
+ * 
+ */

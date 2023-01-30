@@ -45,6 +45,7 @@ public class Character : Role, ICharacter
     private void Awake()
     {
         Initialize();
+        DontDestroyOnLoad(this);
     }
     private void Update()
     {
@@ -243,7 +244,7 @@ public class Character : Role, ICharacter
             ChangeCombatState(CombatStates.Waiting);
 
             if (GameManager.Instance.PlayerCharacter.IsAlive)
-                CombatManager.Instance.UpdateTurnOrder();
+                CombatManager.Instance.UpdateTurnOrderBySpeed();
         }
     }
     public virtual void OnPlayerVictory(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.

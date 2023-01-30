@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance;
     public static GameManager Instance => _instance;
 
-    [SerializeField] private GameObject _playerPrefab;
+    [SerializeField] private SaveManager _saveManager;
+
+    [SerializeField] private GameObject _playerPrefab, _allyPlaceholderPrefab, _enemyPlaceholderPrefab;
 
     private Player _playerCharacter;
     public Player PlayerCharacter => _playerCharacter;
@@ -31,17 +33,30 @@ public class GameManager : MonoBehaviour
     public void InvokeStartGame() // occurs when entering combat.
     {
         OnStartGame?.Invoke();
+        StartCoroutine(LoadInTheNextFrame());
     }
     public void InvokeStartCombat() // occurs when entering combat.
     {
+        SaveManager.Instance.SaveData();
         OnStartCombat?.Invoke();
+        StartCoroutine(LoadInTheNextFrame());
     }
     public void InvokeEndCombat() // occurs if player survived the combat and all enemies are dealt with.
     {
+        SaveManager.Instance.SaveData();
         OnEndCombat?.Invoke();
+        StartCoroutine(LoadInTheNextFrame());
     }
     public void InvokeEndGame() // occurs when entering combat.
     {
+        SaveManager.Instance.SaveData();
         OnEndGame?.Invoke();
+    }
+
+    private IEnumerator LoadInTheNextFrame()
+    {
+        yield return null;
+
+        SaveManager.Instance.LoadData();
     }
 }

@@ -6,16 +6,12 @@ using UnityEngine;
 [Serializable]
 public class SaveData
 {
-    public List<Character> PlayerParty;
-    public List<Enemy> EnemyParty;
-    public List<Ally> PotentialAllies;
-    public Ally[] ChosenAllies;
+    public CharacterData Player;
+    public CharacterData[] ChosenAllies;
+    public List<CharacterData> PotentialAllies;
 
     public SaveData()
     {
-        PlayerParty = new();
-        EnemyParty = new();
-        PotentialAllies = new();
-        ChosenAllies = new Ally[2];
+
     }
 }

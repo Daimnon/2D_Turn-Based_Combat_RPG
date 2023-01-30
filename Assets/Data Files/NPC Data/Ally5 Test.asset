@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d48620f5b75a3546b36c48f93af7e1d, type: 3}
-  m_Name: Enemy Test
+  m_Name: Ally5 Test
   m_EditorClassIdentifier: 
-  _name: Enemy Test
-  _currentLevel: 4
-  _maxHealth: 10
-  _currentHealth: 10
-  _maxMana: 5
-  _currentMana: 5
+  _name: Ally5 Test
+  _currentLevel: 5
+  _maxHealth: 15
+  _currentHealth: 15
+  _maxMana: 29
+  _currentMana: 0
   _vigor: 1
-  _strength: 3
-  _intelligence: 0
-  _speed: 1
+  _strength: 0
+  _intelligence: 12
+  _speed: 2
   _headGear: {fileID: 0}
   _topGear: {fileID: 0}
   _bottomGear: {fileID: 0}
@@ -46,6 +46,6 @@ MonoBehaviour:
   _spentSkillPoints: 0
   _availableSkillPoints: 0
   _totalStatPoints: 0
-  _spentStatPoints: 5
+  _spentStatPoints: 10
   _availableStatPoints: 0
   _allAquiredSkills: []

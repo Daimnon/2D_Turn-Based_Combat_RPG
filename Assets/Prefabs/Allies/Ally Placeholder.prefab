@@ -403,7 +403,7 @@ GameObject:
   - component: {fileID: 6890600146869168301}
   - component: {fileID: -5123864683573904969}
   m_Layer: 0
-  m_Name: Ally
+  m_Name: Ally Placeholder
   m_TagString: Ally
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -7,15 +7,14 @@ public class PartyManager : MonoBehaviour
     private static PartyManager _instance;
     public static PartyManager Instance => _instance;
 
-     //serialization only for debug purposes
-    [SerializeField] private List<Character> _playerParty;
-    [SerializeField] private List<Enemy> _enemyParty;
-    [SerializeField] private List<Ally> _potentialAllies;
-    [SerializeField] private Ally[] _chosenAllies;
+    private List<Ally> _potentialAllies;
+    private Character[] _playerParty;
+    private Enemy[] _enemyParty;
+    private Ally[] _chosenAllies;
 
-    public List<Character> PlayerParty { get => _playerParty; set => _playerParty = value; }
-    public List<Enemy> EnemyParty { get => _enemyParty; set => _enemyParty = value; }
     public List<Ally> PotentialAllies { get => _potentialAllies; set => _potentialAllies = value; }
+    public Character[] PlayerParty { get => _playerParty; set => _playerParty = value; }
+    public Enemy[] EnemyParty { get => _enemyParty; set => _enemyParty = value; }
     public Ally[] ChosenAllies { get => _chosenAllies; set => _chosenAllies = value; }
 
     private void Awake()
@@ -26,21 +25,19 @@ public class PartyManager : MonoBehaviour
     private void Start()
     {
         Initialize();
+        SubscribeToEvent();
     }
 
     private void OnDestroy()
     {
-        GameManager.Instance.OnStartGame -= OnStartGame;
-        GameManager.Instance.OnEndCombat -= OnEndGame;
+        UnsubscribeFromEvent();
     }
     private void Initialize()
     {
-        _playerParty = new List<Character>(3) { GameManager.Instance.PlayerCharacter, null, null };
-        _enemyParty = new List<Enemy>(3) { null, null, null };
         _potentialAllies = new List<Ally>();
-        //_chosenAllies = new Ally[2];
-        GameManager.Instance.OnStartGame += OnStartGame;
-        GameManager.Instance.OnEndCombat += OnEndGame;
+        _playerParty = new Character[3] { GameManager.Instance.PlayerCharacter, null, null };
+        _enemyParty = new Enemy[3] { null, null, null };
+        _chosenAllies = new Ally[2] { null , null };
     }
     public void AddNewAlly(Ally newAlly)
     {
@@ -57,17 +54,22 @@ public class PartyManager : MonoBehaviour
     }
     public void SetEnemyParty(Stage stage)
     {
+        Debug.Log($"Enemy Party Should Initialize Here");
+    }
 
+    public void SubscribeToEvent()
+    {
+        GameManager.Instance.OnStartGame += OnStartGame;
+        GameManager.Instance.OnEndCombat += OnEndGame;
+    }
+    public void UnsubscribeFromEvent()
+    {
+        GameManager.Instance.OnStartGame -= OnStartGame;
+        GameManager.Instance.OnEndCombat -= OnEndGame;
     }
     public void OnStartGame()
     {
-        Debug.Log($"Party Should Initialize Here");
-
-        //for (int i = 1; i < PlayerParty.Count; i++)
-        //{
-        //    PlayerParty[i] = ChosenAllies[i - 1];
-        //    Debug.Log($"{PlayerParty[i]} should be {ChosenAllies[i - 1]}");
-        //}
+        Debug.Log($"Player Party Should Initialize Here");
     }
     public void OnEndGame()
     {
@@ -82,3 +84,10 @@ public class PartyManager : MonoBehaviour
         Debug.Log($"Party survived combat");
     }
 }
+
+/*
+ * populate parties
+ * create item
+ * fill data
+ * choose model by data
+ */
