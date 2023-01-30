@@ -7,7 +7,7 @@ public class PartyManager : MonoBehaviour
     private static PartyManager _instance;
     public static PartyManager Instance => _instance;
 
-    // serialization only for debug purposes
+     //serialization only for debug purposes
     [SerializeField] private List<Character> _playerParty;
     [SerializeField] private List<Enemy> _enemyParty;
     [SerializeField] private List<Ally> _potentialAllies;
@@ -63,11 +63,11 @@ public class PartyManager : MonoBehaviour
     {
         Debug.Log($"Party Should Initialize Here");
 
-        for (int i = 1; i < _playerParty.Count; i++)
-        {
-            _playerParty[i] = _chosenAllies[i - 1];
-            Debug.Log($"{_playerParty[i]} should be {_chosenAllies[i - 1]}");
-        }
+        //for (int i = 1; i < PlayerParty.Count; i++)
+        //{
+        //    PlayerParty[i] = ChosenAllies[i - 1];
+        //    Debug.Log($"{PlayerParty[i]} should be {ChosenAllies[i - 1]}");
+        //}
     }
     public void OnEndGame()
     {
