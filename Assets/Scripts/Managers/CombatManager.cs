@@ -260,6 +260,11 @@ public class CombatManager : MonoBehaviour
         _combatParticipantsSortedByTurn = turnOrder.OrderBy(o => o.Data.Speed).ToList();
         InvokeStartTurnByCharacter(_combatParticipantsSortedByTurn[0]);
     }
+    public void UpdateTurnOrder()
+    {
+        _combatParticipantsSortedByTurn.OrderBy(o => o.Data.Speed).ToList();
+        InvokeStartTurnByCharacter(_combatParticipantsSortedByTurn[0]);
+    }
     public Vector2 GetAttackDirection(Character attackerC, Character recieverC)
     {
         return (attackerC.transform.position - recieverC.AttackerPosTr.position);

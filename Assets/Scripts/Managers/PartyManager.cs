@@ -7,35 +7,38 @@ public class PartyManager : MonoBehaviour
     private static PartyManager _instance;
     public static PartyManager Instance => _instance;
 
-    private List<Character> _playerParty;
-    private List<Enemy> _enemyParty;
-    private List<Ally> _potentialAllies;
-    private Ally[] _chosenAllies;
+    // serialization only for debug purposes
+    [SerializeField] private List<Character> _playerParty;
+    [SerializeField] private List<Enemy> _enemyParty;
+    [SerializeField] private List<Ally> _potentialAllies;
+    [SerializeField] private Ally[] _chosenAllies;
 
     public List<Character> PlayerParty { get => _playerParty; set => _playerParty = value; }
     public List<Enemy> EnemyParty { get => _enemyParty; set => _enemyParty = value; }
+    public List<Ally> PotentialAllies { get => _potentialAllies; set => _potentialAllies = value; }
+    public Ally[] ChosenAllies { get => _chosenAllies; set => _chosenAllies = value; }
 
     private void Awake()
     {
         _instance = this;
-        
         DontDestroyOnLoad(this);
     }
     private void Start()
     {
         Initialize();
     }
+
     private void OnDestroy()
     {
         GameManager.Instance.OnStartGame -= OnStartGame;
         GameManager.Instance.OnEndCombat -= OnEndGame;
     }
-    public void Initialize()
+    private void Initialize()
     {
         _playerParty = new List<Character>(3) { GameManager.Instance.PlayerCharacter, null, null };
         _enemyParty = new List<Enemy>(3) { null, null, null };
         _potentialAllies = new List<Ally>();
-        _chosenAllies = new Ally[2];
+        //_chosenAllies = new Ally[2];
         GameManager.Instance.OnStartGame += OnStartGame;
         GameManager.Instance.OnEndCombat += OnEndGame;
     }
@@ -59,6 +62,12 @@ public class PartyManager : MonoBehaviour
     public void OnStartGame()
     {
         Debug.Log($"Party Should Initialize Here");
+
+        for (int i = 1; i < _playerParty.Count; i++)
+        {
+            _playerParty[i] = _chosenAllies[i - 1];
+            Debug.Log($"{_playerParty[i]} should be {_chosenAllies[i - 1]}");
+        }
     }
     public void OnEndGame()
     {

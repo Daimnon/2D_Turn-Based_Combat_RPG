@@ -241,6 +241,9 @@ public class Character : Role, ICharacter
         if (invokerC == this)
         {
             ChangeCombatState(CombatStates.Waiting);
+
+            if (GameManager.Instance.PlayerCharacter.IsAlive)
+                CombatManager.Instance.UpdateTurnOrder();
         }
     }
     public virtual void OnPlayerVictory(Character invokerC) // occurs if player survived the combat and all enemies are dealt with.

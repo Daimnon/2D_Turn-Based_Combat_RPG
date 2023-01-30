@@ -123,6 +123,50 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &9001413
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9001415}
+  - component: {fileID: 9001414}
+  m_Layer: 0
+  m_Name: JSON
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &9001414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001413}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3bf2642d9f645f40bd0e8d9341836fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &9001415
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9001413}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &35919348 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2421651498762272304, guid: 03ffa0968d38c61499856ecbeeb7891f, type: 3}
@@ -694,6 +738,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &630978685 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -5123864683573904969, guid: 429508067dcb0bd4e9fba3db8854816a, type: 3}
+  m_PrefabInstance: {fileID: 1339108600}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88801b179e77976439090d1a8746e1f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &776681151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1490,6 +1545,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 174255051491328181, guid: cf20f08b20aaa24489d2a02e537a4ba4, type: 3}
+      propertyPath: _chosenAllies.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 174255051491328181, guid: cf20f08b20aaa24489d2a02e537a4ba4, type: 3}
+      propertyPath: _chosenAllies.Array.data[0]
+      value: 
+      objectReference: {fileID: 630978685}
+    - target: {fileID: 174255051491328181, guid: cf20f08b20aaa24489d2a02e537a4ba4, type: 3}
+      propertyPath: _chosenAllies.Array.data[1]
+      value: 
+      objectReference: {fileID: 630978685}
     - target: {fileID: 174255051491328184, guid: cf20f08b20aaa24489d2a02e537a4ba4, type: 3}
       propertyPath: m_Name
       value: Party Manager
